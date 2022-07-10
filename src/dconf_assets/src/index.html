@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>dconf</title>
+    <base href="/" />
+    <link rel="icon" href="favicon.ico" />
+    <link type="text/css" rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <main>
+      <img src="logo.png" alt="DFINITY logo" />
+      <form id="formset" action="#">
+        <label for="key">Set: &nbsp;</label>
+        <input id="key" alt="Key" type="text" />
+        <input id="value" alt="Vakue" type="text" />
+        <button type="submit">Set!</button>
+      </form>
+
+      <form id="formget" action="#">
+        <label for="keyget">Get: &nbsp;</label>
+        <input id="getKey" alt="getKey" type="text" />
+        <button id="get" type="submit">Get!</button>
+      </form>
+
+      <section id="greeting"></section>
+    </main>
+  </body>
+</html>
