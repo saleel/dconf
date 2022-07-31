@@ -12,5 +12,5 @@ export interface _SERVICE {
   >,
   'createEnvironment' : ActorMethod<[string, string, string], string>,
   'get' : ActorMethod<[string], [] | [string]>,
-  'set' : ActorMethod<[string, string], undefined>,
+  'setConfigValue' : ActorMethod<[string, string, string, string], boolean>,
 }

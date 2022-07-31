@@ -17,7 +17,11 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'get' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
-    'set' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'setConfigValue' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Bool],
+        [],
+      ),
   });
 };
 export const init = ({ IDL }) => { return []; };

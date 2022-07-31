@@ -39,6 +39,7 @@ actor {
   private stable var applications : Trie.Trie<Text, Application> = Trie.empty();
   private stable var environments : Trie.Trie<Text, Environment> = Trie.empty();
   private stable var configurations : Trie.Trie<Text, Configuration> = Trie.empty();
+  private stable var configurationValues : Trie.Trie<Text, Text> = Trie.empty();
 
   public shared(msg) func createApplication(id: Text, name: Text) : async Text {
     // Check if there is another app with same id
@@ -118,8 +119,28 @@ actor {
     return id;
   };
 
-  public shared(msg) func set(key: Text, value: Text) : async () {
-    map.put(key, value);
+  public shared(msg) func setConfigValue(appId: Text, envId: Text, configId: Text, value: Text) : async Bool {
+    // Ensure app exist
+    let existingApp = getApplication(appId);
+    if (existingApp == null) return false;
+
+    // Ensure env exist
+    let existingEnv = getEnvironment(appId, envId);
+    if (existingEnv == null) return false;
+
+    // Ensure env exist
+    let existingConfig = getConfiguration(appId, configId);
+    if (existingConfig == null) return false;
+
+    let configurationValueTrieKey = getConfigurationValueTrieKey(appId, envId, configId);
+    configurationValues := Trie.replace(
+      configurationValues,
+      configurationValueTrieKey,
+      Text.equal,
+      ?value,
+    ).0;
+
+    return true;
   };
 
   public func get(key : Text) : async ?Text {
@@ -151,6 +172,11 @@ actor {
 
   private func getConfigurationTrieKey(appId: Text, configId: Text) : Trie.Key<Text> {
     let concatId : Text = Text.concat(appId, configId);
+    return  { hash = Text.hash concatId; key = concatId };
+  };
+
+   private func getConfigurationValueTrieKey(appId: Text, envId: Text, configId: Text) : Trie.Key<Text> {
+    let concatId : Text = Text.concat(Text.concat(appId, envId), configId);
     return  { hash = Text.hash concatId; key = concatId };
   };
 };
