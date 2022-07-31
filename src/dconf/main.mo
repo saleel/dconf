@@ -72,13 +72,13 @@ actor {
      };
   };
 
-  public shared(msg) func createConfiguration(appId: Text, configKey: Text, defaultValue: Text, valueType: Types.ConfigurationTypes) : async Result.Result<Text, Text> {
+  public shared(msg) func createConfiguration(appId: Text, configKey: Text, valueType: Types.ConfigurationTypes, defaultValue: Text) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
         case null { return #err("Application not found") };
         case (?existingApp) {
           // Check for existing env with same title
           if (_getConfiguration(existingApp, configKey) != null) {
-              return #err("Another cont=figuration with same key already exist");
+              return #err("Another configuration with same key already exist");
           };
 
           let configuration : Types.Configuration = {
