@@ -4,6 +4,8 @@ import type { ActorMethod } from '@dfinity/agent';
 export type ConfigurationTypes = { 'string' : null } |
   { 'boolean' : null } |
   { 'number' : null };
+export type Result = { 'ok' : string } |
+  { 'err' : string };
 export interface _SERVICE {
   'createApplication' : ActorMethod<[string, string], string>,
   'createConfiguration' : ActorMethod<
@@ -11,6 +13,6 @@ export interface _SERVICE {
     string,
   >,
   'createEnvironment' : ActorMethod<[string, string, string], string>,
-  'get' : ActorMethod<[string], [] | [string]>,
-  'setConfigValue' : ActorMethod<[string, string, string, string], boolean>,
+  'getConfigValue' : ActorMethod<[string, string, string], [] | [string]>,
+  'setConfigValue' : ActorMethod<[string, string, string, string], Result>,
 }

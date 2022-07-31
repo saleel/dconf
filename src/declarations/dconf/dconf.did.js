@@ -4,6 +4,7 @@ export const idlFactory = ({ IDL }) => {
     'boolean' : IDL.Null,
     'number' : IDL.Null,
   });
+  const Result = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   return IDL.Service({
     'createApplication' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'createConfiguration' : IDL.Func(
@@ -16,10 +17,14 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Text],
         [],
       ),
-    'get' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
+    'getConfigValue' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Opt(IDL.Text)],
+        [],
+      ),
     'setConfigValue' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-        [IDL.Bool],
+        [Result],
         [],
       ),
   });

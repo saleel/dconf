@@ -1,3 +1,8 @@
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
 type ConfigurationTypes = 
  variant {
    boolean;
@@ -8,6 +13,6 @@ service : {
   createApplication: (text, text) -> (text);
   createConfiguration: (text, text, text, ConfigurationTypes) -> (text);
   createEnvironment: (text, text, text) -> (text);
-  get: (text) -> (opt text);
-  setConfigValue: (text, text, text, text) -> (bool);
+  getConfigValue: (text, text, text) -> (opt text);
+  setConfigValue: (text, text, text, text) -> (Result);
 }

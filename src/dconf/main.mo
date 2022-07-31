@@ -2,6 +2,7 @@ import Text "mo:base/Text";
 import Map "mo:base/RBTree";
 import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
+import Result "mo:base/Result";
 import Types "./types";
 
 actor {
@@ -90,18 +91,18 @@ actor {
     return id;
   };
 
-  public shared(msg) func setConfigValue(appId: Text, envId: Text, configId: Text, value: Text) : async Bool {
+  public shared(msg) func setConfigValue(appId: Text, envId: Text, configId: Text, value: Text) : async Result.Result<Text, Text> {
     // Ensure app exist
     let existingApp = getApplication(appId);
-    if (existingApp == null) return false;
+    if (existingApp == null) return #err("App not found");
 
     // Ensure env exist
     let existingEnv = getEnvironment(appId, envId);
-    if (existingEnv == null) return false;
+    if (existingEnv == null) return #err("Env not found");
 
     // Ensure env exist
     let existingConfig = getConfiguration(appId, configId);
-    if (existingConfig == null) return false;
+    if (existingConfig == null) return #err("Config not found");
 
     let configurationValueTrieKey = getConfigurationValueTrieKey(appId, envId, configId);
     configurationValues := Trie.replace(
@@ -111,7 +112,7 @@ actor {
       ?value,
     ).0;
 
-    return true;
+    return #ok(configurationValueTrieKey.key);
   };
 
   public func getConfigValue(appId: Text, envId: Text, configId: Text) : async ?Text {
