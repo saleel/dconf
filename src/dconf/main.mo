@@ -2,43 +2,14 @@ import Text "mo:base/Text";
 import Map "mo:base/RBTree";
 import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
+import Types "./types";
 
 actor {
-  public type Application = {
-    id: Text;
-    name: Text;
-    owner: Principal;
-  };
-
-  public type Environment = {
-    id: Text;
-    applicationId: Text;
-    name: Text;
-  };
-
-   public type ConfigurationTypes = {
-      #string;
-      #number;
-      #boolean;
-  };
-
-  public type Configuration = {
-    key: Text;
-    defaultValue: Text;
-    valueType: ConfigurationTypes;
-  };
-
-  public type ConfigurationValue = {
-    applicationId: Nat;
-    environmentId: Nat;
-    value: Text;
-  };
-
   let map = Map.RBTree<Text, Text>(Text.compare);
 
-  private stable var applications : Trie.Trie<Text, Application> = Trie.empty();
-  private stable var environments : Trie.Trie<Text, Environment> = Trie.empty();
-  private stable var configurations : Trie.Trie<Text, Configuration> = Trie.empty();
+  private stable var applications : Trie.Trie<Text, Types.Application> = Trie.empty();
+  private stable var environments : Trie.Trie<Text, Types.Environment> = Trie.empty();
+  private stable var configurations : Trie.Trie<Text, Types.Configuration> = Trie.empty();
   private stable var configurationValues : Trie.Trie<Text, Text> = Trie.empty();
 
   public shared(msg) func createApplication(id: Text, name: Text) : async Text {
@@ -48,7 +19,7 @@ actor {
 
     let appKey = getApplicationTrieKey(id);
 
-    let application : Application = {
+    let application : Types.Application = {
       id = id;
       name = name;
       owner = msg.caller;
@@ -75,7 +46,7 @@ actor {
 
     let envKey = getEnvironmentTrieKey(appId, id);
 
-    let environment : Environment = {
+    let environment : Types.Environment = {
       id= id;
       applicationId= appId;
       name = name;
@@ -91,7 +62,7 @@ actor {
     return id;
   };
 
-  public shared(msg) func createConfiguration(id: Text, defaultValue: Text, appId: Text, valueType: ConfigurationTypes) : async Text {
+  public shared(msg) func createConfiguration(id: Text, defaultValue: Text, appId: Text, valueType: Types.ConfigurationTypes) : async Text {
     // Ensure app exist
     let existingApp = getApplication(appId);
     if (existingApp == null) return "";
@@ -102,7 +73,7 @@ actor {
 
     let configKey = getConfigurationTrieKey(appId, id);
 
-    let configuration : Configuration = {
+    let configuration : Types.Configuration = {
       key= id;
       applicationId= appId;
       defaultValue = defaultValue;
@@ -143,21 +114,38 @@ actor {
     return true;
   };
 
-  public func get(key : Text) : async ?Text {
-    let value = map.get(key);
+  public func getConfigValue(appId: Text, envId: Text, configId: Text) : async ?Text {
+    // Ensure app exist
+    let existingApp = getApplication(appId);
+    if (existingApp == null) return null;
 
-    return value;
+    // Ensure env exist
+    let existingEnv = getEnvironment(appId, envId);
+    if (existingEnv == null) return null;
+
+    // Ensure env exist
+    let existingConfig = getConfiguration(appId, configId);
+    if (existingConfig == null) return null;
+
+    let configurationValueTrieKey = getConfigurationValueTrieKey(appId, envId, configId);
+    let result = Trie.get(configurationValues, configurationValueTrieKey, Text.equal);
+
+    if (result != null) {
+      return result;
+    };
+
+    return null;
   };
 
-  private func getApplication(appId : Text) : ?Application {
+  private func getApplication(appId : Text) : ?Types.Application {
     return Trie.find(applications, getApplicationTrieKey(appId), Text.equal);
   };
 
-  private func getEnvironment(appId : Text, envId: Text) : ?Environment {
+  private func getEnvironment(appId : Text, envId: Text) : ?Types.Environment {
     return Trie.find(environments, getEnvironmentTrieKey(appId, envId), Text.equal);
   };
 
-   private func getConfiguration(appId : Text, configKey: Text) : ?Configuration {
+   private func getConfiguration(appId : Text, configKey: Text) : ?Types.Configuration {
     return Trie.find(configurations, getConfigurationTrieKey(appId, configKey), Text.equal);
   };
 
