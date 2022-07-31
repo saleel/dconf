@@ -7,12 +7,12 @@ export type ConfigurationTypes = { 'string' : null } |
 export type Result = { 'ok' : string } |
   { 'err' : string };
 export interface _SERVICE {
-  'createApplication' : ActorMethod<[string, string], string>,
+  'createApplication' : ActorMethod<[string, string], Result>,
   'createConfiguration' : ActorMethod<
     [string, string, string, ConfigurationTypes],
-    string,
+    Result,
   >,
-  'createEnvironment' : ActorMethod<[string, string, string], string>,
-  'getConfigValue' : ActorMethod<[string, string, string], [] | [string]>,
+  'createEnvironment' : ActorMethod<[string, string, string], Result>,
+  'getConfigValue' : ActorMethod<[string, string, string], Result>,
   'setConfigValue' : ActorMethod<[string, string, string, string], Result>,
 }

@@ -10,9 +10,9 @@ type ConfigurationTypes =
    string;
  };
 service : {
-  createApplication: (text, text) -> (text);
-  createConfiguration: (text, text, text, ConfigurationTypes) -> (text);
-  createEnvironment: (text, text, text) -> (text);
-  getConfigValue: (text, text, text) -> (opt text);
+  createApplication: (text, text) -> (Result);
+  createConfiguration: (text, text, text, ConfigurationTypes) -> (Result);
+  createEnvironment: (text, text, text) -> (Result);
+  getConfigValue: (text, text, text) -> (Result);
   setConfigValue: (text, text, text, text) -> (Result);
 }

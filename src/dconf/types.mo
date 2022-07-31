@@ -1,20 +1,17 @@
+import List "mo:base/List";
+
 module {
   public type Application = {
     id: Text;
-    name: Text;
-    owner: Principal;
+    var title: Text;
+    var owner: Principal;
+    var environments: List.List<Environment>;
+    var configurations: List.List<Configuration>;
   };
 
   public type Environment = {
     id: Text;
-    applicationId: Text;
-    name: Text;
-  };
-
-    public type ConfigurationTypes = {
-      #string;
-      #number;
-      #boolean;
+    title: Text;
   };
 
   public type Configuration = {
@@ -23,9 +20,10 @@ module {
     valueType: ConfigurationTypes;
   };
 
-  public type ConfigurationValue = {
-    applicationId: Nat;
-    environmentId: Nat;
-    value: Text;
+  public type ConfigurationTypes = {
+      #string;
+      #number;
+      #boolean;
   };
+
 };
