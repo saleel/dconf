@@ -1,7 +1,32 @@
+type Result_1 = 
+ variant {
+   err: text;
+   ok: Application;
+ };
 type Result = 
  variant {
    err: text;
    ok: text;
+ };
+type List_1 = 
+ opt record {
+       Environment;
+       List_1;
+     };
+type List = 
+ opt record {
+       Configuration;
+       List;
+     };
+type EnvironmentList = 
+ opt record {
+       Environment;
+       List_1;
+     };
+type Environment = 
+ record {
+   id: text;
+   title: text;
  };
 type ConfigurationTypes = 
  variant {
@@ -9,10 +34,30 @@ type ConfigurationTypes =
    number;
    string;
  };
+type ConfigurationList = 
+ opt record {
+       Configuration;
+       List;
+     };
+type Configuration = 
+ record {
+   defaultValue: text;
+   key: text;
+   valueType: ConfigurationTypes;
+ };
+type Application = 
+ record {
+   configurations: ConfigurationList;
+   environments: EnvironmentList;
+   id: text;
+   owner: principal;
+   title: text;
+ };
 service : {
   createApplication: (text, text) -> (Result);
   createConfiguration: (text, text, text, ConfigurationTypes) -> (Result);
   createEnvironment: (text, text, text) -> (Result);
+  getApplication: (text) -> (Result_1);
   getConfigValue: (text, text, text) -> (Result);
   setConfigValue: (text, text, text, text) -> (Result);
 }

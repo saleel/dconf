@@ -1,12 +1,15 @@
 import List "mo:base/List";
 
 module {
+  public type EnvironmentList = List.List<Environment>;
+  public type ConfigurationList = List.List<Configuration>;
+
   public type Application = {
     id: Text;
-    var title: Text;
-    var owner: Principal;
-    var environments: List.List<Environment>;
-    var configurations: List.List<Configuration>;
+    title: Text;
+    owner: Principal;
+    environments: EnvironmentList;
+    configurations: ConfigurationList;
   };
 
   public type Environment = {
@@ -25,5 +28,4 @@ module {
       #number;
       #boolean;
   };
-
 };

@@ -17,10 +17,10 @@ actor {
 
         let application : Types.Application = {
           id = id;
-          var title = title;
-          var owner = msg.caller;
-          var environments : List.List<Types.Environment> = List.nil();
-          var configurations : List.List<Types.Configuration> = List.nil();
+          title = title;
+          owner = msg.caller;
+          environments : Types.EnvironmentList = List.nil();
+          configurations : Types.ConfigurationList = List.nil();
         };
 
         applications := Trie.replace(
@@ -50,7 +50,22 @@ actor {
             title = title;
           };
 
-          existingApp.environments := List.push(environment, existingApp.environments);
+          let newEnvironments = List.push(environment, existingApp.environments);
+
+          let newApplication : Types.Application = {
+            id = existingApp.id;
+            title = existingApp.title;
+            owner = existingApp.owner;
+            configurations = existingApp.configurations;
+            environments = newEnvironments;
+          };
+
+          applications := Trie.replace(
+            applications,
+            _getApplicationTrieKey(appId),
+            Text.equal,
+            ?newApplication,
+          ).0;
 
           return #ok(envId);
         }
@@ -73,7 +88,22 @@ actor {
             valueType = valueType;
           };
 
-          existingApp.configurations := List.push(configuration, existingApp.configurations);
+          let newConfigurations = List.push(configuration, existingApp.configurations);
+
+          let newApplication : Types.Application = {
+            id = existingApp.id;
+            title = existingApp.title;
+            owner = existingApp.owner;
+            environments = existingApp.environments;
+            configurations = newConfigurations;
+          };
+
+          applications := Trie.replace(
+            applications,
+            _getApplicationTrieKey(appId),
+            Text.equal,
+            ?newApplication,
+          ).0;
 
           return #ok(configKey);
         }
@@ -130,6 +160,13 @@ actor {
           case (?resultValue) #ok(resultValue);
         }
       }
+    };
+  };
+
+  public shared(msg) func getApplication(id: Text) : async Result.Result<Types.Application, Text> {
+    switch (_getApplication(id)) {
+      case null #err("No Application found with given id");
+      case (?existingApp) #ok(existingApp);
     };
   };
 
