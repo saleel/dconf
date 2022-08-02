@@ -1,26 +1,17 @@
-import { dconf } from "../../declarations/dconf";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
+import './styles.scss';
+import Modal from 'react-modal';
+import App from './app';
 
-document.getElementById("formget").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const btnGet = e.target.querySelector("button");
-  const getKey = document.getElementById("getKey").value.toString();
-  btnGet.setAttribute("disabled", true);
-  const greeting = await dconf.get(getKey);
-  btnGet.removeAttribute("disabled");
-  document.getElementById("greeting").innerText = greeting;
+const container = document.getElementById('root');
+Modal.setAppElement(container);
 
-  return false;
-});
+const root = createRoot(container);
 
-
-document.getElementById("formset").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const btnSet = e.target.querySelector("button");
-  const key = document.getElementById("key").value.toString();
-  const value = document.getElementById("value").value.toString();
-  btnSet.setAttribute("disabled", true);
-  await dconf.set(key, value);
-  btnSet.removeAttribute("disabled");
-
-  return false;
-});
+root.render(
+  <HashRouter>
+    <App />
+  </HashRouter>,
+);

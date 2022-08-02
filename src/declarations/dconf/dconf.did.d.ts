@@ -28,7 +28,7 @@ export type Result_1 = { 'ok' : Application } |
 export interface _SERVICE {
   'createApplication' : ActorMethod<[string, string], Result>,
   'createConfiguration' : ActorMethod<
-    [string, string, string, ConfigurationTypes],
+    [string, string, ConfigurationTypes, string],
     Result,
   >,
   'createEnvironment' : ActorMethod<[string, string, string], Result>,

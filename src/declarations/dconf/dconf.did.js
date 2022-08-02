@@ -28,7 +28,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'createApplication' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'createConfiguration' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, ConfigurationTypes],
+        [IDL.Text, IDL.Text, ConfigurationTypes, IDL.Text],
         [Result],
         [],
       ),

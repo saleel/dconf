@@ -55,7 +55,7 @@ type Application =
  };
 service : {
   createApplication: (text, text) -> (Result);
-  createConfiguration: (text, text, text, ConfigurationTypes) -> (Result);
+  createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
   createEnvironment: (text, text, text) -> (Result);
   getApplication: (text) -> (Result_1);
   getConfigValue: (text, text, text) -> (Result);
