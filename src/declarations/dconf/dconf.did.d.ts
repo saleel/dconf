@@ -3,8 +3,8 @@ import type { ActorMethod } from '@dfinity/agent';
 
 export interface Application {
   'id' : string,
-  'title' : string,
   'owner' : Principal,
+  'name' : string,
   'configurations' : ConfigurationList,
   'environments' : EnvironmentList,
 }
@@ -17,7 +17,7 @@ export type ConfigurationList = [] | [[Configuration, List]];
 export type ConfigurationTypes = { 'string' : null } |
   { 'boolean' : null } |
   { 'number' : null };
-export interface Environment { 'id' : string, 'title' : string }
+export interface Environment { 'id' : string, 'name' : string }
 export type EnvironmentList = [] | [[Environment, List_1]];
 export type List = [] | [[Configuration, List]];
 export type List_1 = [] | [[Environment, List_1]];

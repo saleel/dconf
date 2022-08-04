@@ -10,14 +10,14 @@ actor {
   private stable var applications : Trie.Trie<Text, Types.Application> = Trie.empty();
   private stable var configurationValues : Trie.Trie<Text, Text> = Trie.empty();
 
-  public shared(msg) func createApplication(id: Text, title: Text) : async Result.Result<Text, Text> {
+  public shared(msg) func createApplication(id: Text, name: Text) : async Result.Result<Text, Text> {
      switch (_getApplication(id)) {
       case null {
         let appKey = _getApplicationTrieKey(id);
 
         let application : Types.Application = {
           id = id;
-          title = title;
+          name = name;
           owner = msg.caller;
           environments : Types.EnvironmentList = List.nil();
           configurations : Types.ConfigurationList = List.nil();
@@ -36,25 +36,25 @@ actor {
     };
   };
 
-  public shared(msg) func createEnvironment(appId: Text, envId: Text, title: Text) : async Result.Result<Text, Text> {
+  public shared(msg) func createEnvironment(appId: Text, envId: Text, name: Text) : async Result.Result<Text, Text> {
      switch (_getApplication(appId)) {
         case null { return #err("Application not found") };
         case (?existingApp) {
-          // Check for existing env with same title
+          // Check for existing env with same name
           if (_getEnvironment(existingApp, envId) != null) {
               return #err("Another environment with same id already exist");
           };
 
           let environment : Types.Environment = {
             id = envId;
-            title = title;
+            name = name;
           };
 
           let newEnvironments = List.push(environment, existingApp.environments);
 
           let newApplication : Types.Application = {
             id = existingApp.id;
-            title = existingApp.title;
+            name = existingApp.name;
             owner = existingApp.owner;
             configurations = existingApp.configurations;
             environments = newEnvironments;
@@ -76,7 +76,7 @@ actor {
     switch (_getApplication(appId)) {
         case null { return #err("Application not found") };
         case (?existingApp) {
-          // Check for existing env with same title
+          // Check for existing env with same name
           if (_getConfiguration(existingApp, configKey) != null) {
               return #err("Another configuration with same key already exist");
           };
@@ -88,11 +88,11 @@ actor {
             valueType = valueType;
           };
 
-          let newConfigurations = List.push(configuration, existingApp.configurations);
+          let newConfigurations = List.([], existingApp.configurations);
 
           let newApplication : Types.Application = {
             id = existingApp.id;
-            title = existingApp.title;
+            name = existingApp.name;
             owner = existingApp.owner;
             environments = existingApp.environments;
             configurations = newConfigurations;

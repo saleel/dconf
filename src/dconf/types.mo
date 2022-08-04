@@ -6,7 +6,7 @@ module {
 
   public type Application = {
     id: Text;
-    title: Text;
+    name: Text;
     owner: Principal;
     environments: EnvironmentList;
     configurations: ConfigurationList;
@@ -14,7 +14,7 @@ module {
 
   public type Environment = {
     id: Text;
-    title: Text;
+    name: Text;
   };
 
   public type Configuration = {

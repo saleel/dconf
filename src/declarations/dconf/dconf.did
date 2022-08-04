@@ -26,7 +26,7 @@ type EnvironmentList =
 type Environment = 
  record {
    id: text;
-   title: text;
+   name: text;
  };
 type ConfigurationTypes = 
  variant {
@@ -50,8 +50,8 @@ type Application =
    configurations: ConfigurationList;
    environments: EnvironmentList;
    id: text;
+   name: text;
    owner: principal;
-   title: text;
  };
 service : {
   createApplication: (text, text) -> (Result);

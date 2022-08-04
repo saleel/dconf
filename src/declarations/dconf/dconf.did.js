@@ -14,13 +14,13 @@ export const idlFactory = ({ IDL }) => {
   });
   List.fill(IDL.Opt(IDL.Tuple(Configuration, List)));
   const ConfigurationList = IDL.Opt(IDL.Tuple(Configuration, List));
-  const Environment = IDL.Record({ 'id' : IDL.Text, 'title' : IDL.Text });
+  const Environment = IDL.Record({ 'id' : IDL.Text, 'name' : IDL.Text });
   List_1.fill(IDL.Opt(IDL.Tuple(Environment, List_1)));
   const EnvironmentList = IDL.Opt(IDL.Tuple(Environment, List_1));
   const Application = IDL.Record({
     'id' : IDL.Text,
-    'title' : IDL.Text,
     'owner' : IDL.Principal,
+    'name' : IDL.Text,
     'configurations' : ConfigurationList,
     'environments' : EnvironmentList,
   });
