@@ -1,9 +1,10 @@
-import Text "mo:base/Text";
+import Array "mo:base/Array";
 import Map "mo:base/RBTree";
-import Trie "mo:base/Trie";
-import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Trie "mo:base/Trie";
+import Type "types";
 import Types "./types";
 
 actor {
@@ -19,8 +20,8 @@ actor {
           id = id;
           name = name;
           owner = msg.caller;
-          environments : Types.EnvironmentList = List.nil();
-          configurations : Types.ConfigurationList = List.nil();
+          environments = [];
+          configurations = [];
         };
 
         applications := Trie.replace(
@@ -50,14 +51,12 @@ actor {
             name = name;
           };
 
-          let newEnvironments = List.push(environment, existingApp.environments);
-
           let newApplication : Types.Application = {
             id = existingApp.id;
             name = existingApp.name;
             owner = existingApp.owner;
+            environments = Array.append(existingApp.environments, [environment]);
             configurations = existingApp.configurations;
-            environments = newEnvironments;
           };
 
           applications := Trie.replace(
@@ -88,14 +87,12 @@ actor {
             valueType = valueType;
           };
 
-          let newConfigurations = List.([], existingApp.configurations);
-
           let newApplication : Types.Application = {
             id = existingApp.id;
             name = existingApp.name;
             owner = existingApp.owner;
             environments = existingApp.environments;
-            configurations = newConfigurations;
+            configurations = Array.append(existingApp.configurations, [configuration]);
           };
 
           applications := Trie.replace(
@@ -175,11 +172,11 @@ actor {
   };
 
   private func _getEnvironment(app : Types.Application, envId: Text) : ?Types.Environment {
-    return List.find(app.environments, func (e : Types.Environment) : Bool = e.id == envId)
+    return Array.find(app.environments, func (e : Types.Environment) : Bool = e.id == envId);
   };
 
   private func _getConfiguration(app : Types.Application, configKey: Text) : ?Types.Configuration {
-    return List.find(app.configurations, func (e : Types.Configuration) : Bool = e.key == configKey)
+    return Array.find(app.configurations, func (e : Types.Configuration) : Bool = e.key == configKey)
   };
 
   private func _getApplicationTrieKey(appId : Text) : Trie.Key<Text> {

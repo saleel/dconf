@@ -1,6 +1,4 @@
 export const idlFactory = ({ IDL }) => {
-  const List = IDL.Rec();
-  const List_1 = IDL.Rec();
   const Result = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const ConfigurationTypes = IDL.Variant({
     'string' : IDL.Null,
@@ -12,11 +10,9 @@ export const idlFactory = ({ IDL }) => {
     'valueType' : ConfigurationTypes,
     'defaultValue' : IDL.Text,
   });
-  List.fill(IDL.Opt(IDL.Tuple(Configuration, List)));
-  const ConfigurationList = IDL.Opt(IDL.Tuple(Configuration, List));
+  const ConfigurationList = IDL.Vec(Configuration);
   const Environment = IDL.Record({ 'id' : IDL.Text, 'name' : IDL.Text });
-  List_1.fill(IDL.Opt(IDL.Tuple(Environment, List_1)));
-  const EnvironmentList = IDL.Opt(IDL.Tuple(Environment, List_1));
+  const EnvironmentList = IDL.Vec(Environment);
   const Application = IDL.Record({
     'id' : IDL.Text,
     'owner' : IDL.Principal,

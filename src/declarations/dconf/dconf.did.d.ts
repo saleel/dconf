@@ -13,14 +13,12 @@ export interface Configuration {
   'valueType' : ConfigurationTypes,
   'defaultValue' : string,
 }
-export type ConfigurationList = [] | [[Configuration, List]];
+export type ConfigurationList = Array<Configuration>;
 export type ConfigurationTypes = { 'string' : null } |
   { 'boolean' : null } |
   { 'number' : null };
 export interface Environment { 'id' : string, 'name' : string }
-export type EnvironmentList = [] | [[Environment, List_1]];
-export type List = [] | [[Configuration, List]];
-export type List_1 = [] | [[Environment, List_1]];
+export type EnvironmentList = Array<Environment>;
 export type Result = { 'ok' : string } |
   { 'err' : string };
 export type Result_1 = { 'ok' : Application } |

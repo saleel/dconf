@@ -1,8 +1,8 @@
-import List "mo:base/List";
+import Array "mo:base/Array";
 
 module {
-  public type EnvironmentList = List.List<Environment>;
-  public type ConfigurationList = List.List<Configuration>;
+  public type EnvironmentList = [Environment];
+  public type ConfigurationList = [Configuration];
 
   public type Application = {
     id: Text;

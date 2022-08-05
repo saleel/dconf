@@ -1,32 +1,67 @@
-type Result_1 = 
+type Trie_1 = 
  variant {
-   err: text;
-   ok: Application;
+   branch: Branch_1;
+   "empty";
+   leaf: Leaf_1;
  };
-type Result = 
+type Trie = 
+ variant {
+   branch: Branch;
+   "empty";
+   leaf: Leaf;
+ };
+type Result_1 = 
  variant {
    err: text;
    ok: text;
  };
+type Result = 
+ variant {
+   err: text;
+   ok: Application;
+ };
 type List_1 = 
  opt record {
-       Environment;
+       record {
+         Key;
+         Environment;
+       };
        List_1;
      };
 type List = 
  opt record {
-       Configuration;
+       record {
+         Key;
+         Configuration;
+       };
        List;
      };
+type Leaf_1 = 
+ record {
+   keyvals: AssocList_1;
+   size: nat;
+ };
+type Leaf = 
+ record {
+   keyvals: AssocList;
+   size: nat;
+ };
+type Key = 
+ record {
+   hash: Hash;
+   key: text;
+ };
+type Hash = nat32;
 type EnvironmentList = 
- opt record {
-       Environment;
-       List_1;
-     };
+ variant {
+   branch: Branch_1;
+   "empty";
+   leaf: Leaf_1;
+ };
 type Environment = 
  record {
    id: text;
-   title: text;
+   name: text;
  };
 type ConfigurationTypes = 
  variant {
@@ -35,29 +70,55 @@ type ConfigurationTypes =
    string;
  };
 type ConfigurationList = 
- opt record {
-       Configuration;
-       List;
-     };
+ variant {
+   branch: Branch;
+   "empty";
+   leaf: Leaf;
+ };
 type Configuration = 
  record {
    defaultValue: text;
    key: text;
    valueType: ConfigurationTypes;
  };
+type Branch_1 = 
+ record {
+   left: Trie_1;
+   right: Trie_1;
+   size: nat;
+ };
+type Branch = 
+ record {
+   left: Trie;
+   right: Trie;
+   size: nat;
+ };
+type AssocList_1 = 
+ opt record {
+       record {
+         Key;
+         Environment;
+       };
+       List_1;
+     };
+type AssocList = 
+ opt record {
+       record {
+         Key;
+         Configuration;
+       };
+       List;
+     };
 type Application = 
  record {
    configurations: ConfigurationList;
    environments: EnvironmentList;
    id: text;
+   name: text;
    owner: principal;
-   title: text;
  };
 service : {
-  createApplication: (text, text) -> (Result);
-  createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
-  createEnvironment: (text, text, text) -> (Result);
-  getApplication: (text) -> (Result_1);
-  getConfigValue: (text, text, text) -> (Result);
-  setConfigValue: (text, text, text, text) -> (Result);
+  createApplication: (text, text) -> (Result_1);
+  createEnvironment: (text, text, text) -> (Result_1);
+  getApplication: (text) -> (Result);
 }
