@@ -5,6 +5,16 @@ export const idlFactory = ({ IDL }) => {
     'boolean' : IDL.Null,
     'number' : IDL.Null,
   });
+  const ConfigurationValueForEnv = IDL.Record({
+    'key' : IDL.Text,
+    'value' : IDL.Text,
+    'valueType' : ConfigurationTypes,
+    'environmentId' : IDL.Text,
+  });
+  const Result_2 = IDL.Variant({
+    'ok' : IDL.Vec(ConfigurationValueForEnv),
+    'err' : IDL.Text,
+  });
   const Configuration = IDL.Record({
     'key' : IDL.Text,
     'valueType' : ConfigurationTypes,
@@ -33,6 +43,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'getAllConfigValues' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
     'getApplication' : IDL.Func([IDL.Text], [Result_1], []),
     'getConfigValue' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [Result], []),
     'setConfigValue' : IDL.Func(

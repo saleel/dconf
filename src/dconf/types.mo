@@ -28,4 +28,11 @@ module {
       #number;
       #boolean;
   };
+
+  public type ConfigurationValueForEnv = {
+    key: Text;
+    environmentId: Text;
+    valueType: ConfigurationTypes;
+    value: Text;
+  };
 };

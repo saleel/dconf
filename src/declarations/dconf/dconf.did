@@ -1,3 +1,8 @@
+type Result_2 = 
+ variant {
+   err: text;
+   ok: vec ConfigurationValueForEnv;
+ };
 type Result_1 = 
  variant {
    err: text;
@@ -13,6 +18,13 @@ type Environment =
  record {
    id: text;
    name: text;
+ };
+type ConfigurationValueForEnv = 
+ record {
+   environmentId: text;
+   key: text;
+   value: text;
+   valueType: ConfigurationTypes;
  };
 type ConfigurationTypes = 
  variant {
@@ -39,6 +51,7 @@ service : {
   createApplication: (text, text) -> (Result);
   createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
   createEnvironment: (text, text, text) -> (Result);
+  getAllConfigValues: (text, text) -> (Result_2);
   getApplication: (text) -> (Result_1);
   getConfigValue: (text, text, text) -> (Result);
   setConfigValue: (text, text, text, text) -> (Result);

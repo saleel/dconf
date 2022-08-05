@@ -1,10 +1,7 @@
 import Array "mo:base/Array";
-import Map "mo:base/RBTree";
-import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
-import Type "types";
 import Types "./types";
 
 actor {
@@ -140,7 +137,6 @@ actor {
         let existingEnv = _getEnvironment(existingApp, envId);
         if (existingEnv == null) return #err("No Environment found with given id");
 
-        // Ensure env exist
         let existingConfig = _getConfiguration(existingApp, configId);
         if (existingConfig == null) return #err("No Configuration found with given id");
 
@@ -156,6 +152,36 @@ actor {
           };
           case (?resultValue) #ok(resultValue);
         }
+      }
+    };
+  };
+
+  public func getAllConfigValues(appId: Text, envId: Text) : async Result.Result<[Types.ConfigurationValueForEnv], Text> {
+    switch (_getApplication(appId)) {
+      case null #err("No Application found with given id");
+      case (?existingApp) {
+        // Ensure env exist
+        let existingEnv = _getEnvironment(existingApp, envId);
+        if (existingEnv == null) return #err("No Environment found with given id");
+
+        let allConfigValues = Array.mapEntries<Types.Configuration, Types.ConfigurationValueForEnv>(
+          existingApp.configurations, 
+          func (config: Types.Configuration, index: Nat) : Types.ConfigurationValueForEnv {
+            let configurationValueTrieKey = _getConfigurationValueTrieKey(appId, envId, config.key);
+            let result = Trie.get(configurationValues, configurationValueTrieKey, Text.equal);
+
+            let configurationValueForEnv : Types.ConfigurationValueForEnv = {
+              key = config.key;
+              environmentId = envId;
+              valueType = config.valueType;
+              value = switch (result) { case(null) { config.defaultValue }; case(?configVal) { configVal };  };
+            };
+
+            return configurationValueForEnv;
+          }
+        );
+
+        return #ok(allConfigValues);
       }
     };
   };

@@ -1,6 +1,6 @@
 import React from 'react';
 import usePromise from '../hooks/use-promise';
-import { getApplication } from '../data-service';
+import { getApplication, getAllConfigValues } from '../data-service';
 
 function HomePage() {
   React.useEffect(() => {
@@ -9,15 +9,21 @@ function HomePage() {
 
   const [application, { isFetching, error }] = usePromise(() => getApplication("chainlook"));
 
-  console.log(application);
+  const [allConfigValues, { isFetching: isFetchingValues, error: errorValues }] = usePromise(
+    () => getAllConfigValues(application), {
+      conditions: [application],
+      defaultValue: {},
+    }
+  );
 
+  console.log(allConfigValues);
 
-  if (isFetching) {
+  if (isFetching || isFetchingValues) {
     return (<div>Loading</div>);
   }
 
-  if (error) {
-    return (<div>{error.message}</div>);
+  if (error || errorValues) {
+    return (<div>{(error || errorValues).message}</div>);
   }
 
   if (!application) {
@@ -33,10 +39,12 @@ function HomePage() {
 
         Configuration Management for {name}
 
-        <div className="table-container">
+        <div className="table-container mt-4">
+
           <table className="table">
             <thead>
               <tr>
+                <th />
                 {(environments).map((environment) => (
                   <th key={environment.id}>
                     {environment.name || environment.id}
@@ -47,21 +55,22 @@ function HomePage() {
 
             <tbody>
               {configurations.map((conf, i) => (
-                // eslint-disable-next-line react/no-array-index-key
                 <tr key={i}>
+                  <td>{conf.key}</td>
                   {environments.map((env) => {
+                    const value = allConfigValues[env.id]?.find(c => c.key === conf.key)?.value;
+
                     return (
-                      <td key={env.id}>{env.id} {conf.key}</td>
+                      <td key={env.id}>{value ?? ""}</td>
                     );
                   })}
                 </tr>
               ))}
             </tbody>
           </table>
+
         </div>
-
       </div>
-
     </div>
   );
 }
