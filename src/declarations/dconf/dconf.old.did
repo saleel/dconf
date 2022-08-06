@@ -1,12 +1,12 @@
 type Result_1 = 
  variant {
    err: text;
-   ok: text;
+   ok: Application;
  };
 type Result = 
  variant {
    err: text;
-   ok: Application;
+   ok: text;
  };
 type EnvironmentList = vec Environment;
 type Environment = 
@@ -36,7 +36,10 @@ type Application =
    owner: principal;
  };
 service : {
-  createApplication: (text, text) -> (Result_1);
-  createEnvironment: (text, text, text) -> (Result_1);
-  getApplication: (text) -> (Result);
+  createApplication: (text, text) -> (Result);
+  createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
+  createEnvironment: (text, text, text) -> (Result);
+  getApplication: (text) -> (Result_1);
+  getConfigValue: (text, text, text) -> (Result);
+  setConfigValue: (text, text, text, text) -> (Result);
 }
