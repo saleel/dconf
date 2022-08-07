@@ -9,11 +9,10 @@
         "dconf"
       ],
       "frontend": {
-        "entrypoint": "src/dconf_assets/src/index.html"
+        "entrypoint": "src/dconf_assets/index.html"
       },
       "source": [
-        "src/dconf_assets/assets",
-        "dist/dconf_assets/"
+        "dist"
       ],
       "type": "assets"
     }

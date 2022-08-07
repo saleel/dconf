@@ -1,5 +1,7 @@
 import { dconf as canister } from '../../declarations/dconf';
 
+console.log("HERE");
+
 export async function getApplication(applicationId) {
   const response = await canister.getApplication(applicationId);
   return response.ok;
