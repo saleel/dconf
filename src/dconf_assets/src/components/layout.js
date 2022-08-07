@@ -11,18 +11,18 @@ export default function Layout() {
           </Link>
         </h1>
 
-        <div className="menu">
-        </div>
+        <div className="menu" />
 
       </div>
 
       <div className="main wrapper">
         <hr />
+
         <Outlet />
       </div>
 
       <div className="footer wrapper">
-        
+        API Docs
       </div>
     </>
   );

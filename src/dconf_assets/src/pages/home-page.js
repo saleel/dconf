@@ -37,16 +37,16 @@ function HomePage() {
   return (
     <div className="page home-page">
 
-      <div className="intro mb-5">
+      <div className="section-title mb-5">
         Configuration Management for {name}
       </div>
 
-      <div className="table-container mt-4">
+      <div className="table-container">
 
-        <table className="table">
+        <table className="table config-table">
           <thead>
             <tr>
-              <th> </th>
+              <th>Config Key</th>
               {(environments).map((environment) => (
                 <th key={environment.id}>
                   {environment.name || environment.id}
@@ -69,12 +69,13 @@ function HomePage() {
 
                       <button
                         type="button"
+                        className="icon-button btn-edit-config"
                         onClick={() => {
                           setSelectedConfig({ environment: env, configuration: conf, currentValue: value });
                           setIsEditModalOpen(true);
                         }}
                       >
-                        E
+                        <i className="icon icon-pencil" />
                       </button>
                     </td>
                   );

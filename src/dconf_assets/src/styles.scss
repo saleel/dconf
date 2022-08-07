@@ -45,25 +45,21 @@ body {
 }
 
 .wrapper {
-  padding: 1rem 1.5rem;
+  max-width: 1280px;
+  padding: 0 1.5rem;
   width: 100%;
   margin: 0 auto;
 }
 
 .main {
-  max-width: 1400px;
-  display: flex;
-  flex-direction: row;
   height: 100%;
-  flex-grow: 1;
-  padding: 1.5rem;
+  width: 100%;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--gray-400);
 }
 
 .menu {
@@ -145,6 +141,7 @@ body {
   background: none;
   padding: 0;
   margin: 0;
+  border: 0;
 }
 
 .table-container {
@@ -154,7 +151,6 @@ body {
 
 .table {
   width: 100%;
-  border-collapse: collapse;
   border: 1px solid var(--text-color);
 
   thead {
@@ -188,7 +184,7 @@ body {
         font-size: 1rem;
         font-weight: 500;
         padding: 0.6rem 0.8rem;
-        border-bottom: 1px solid var(--gray-300);
+        border-bottom: 0.5px solid var(--text-color);
         opacity: 0.9;
       }
 
@@ -197,10 +193,30 @@ body {
           border-bottom: none;
         }
       }
+
+      &:hover {
+        background-color: var(--gray-100);
+      }
     }
   }
 }
 
+.btn-edit-config {
+  visibility: hidden;
+  margin-left: 1rem;
+}
+
+.config-table {
+  td {
+    &:hover {
+      background-color: var(--gray-200);
+
+      .btn-edit-config {
+        visibility: visible;
+      }
+    }
+  }
+}
 
 .button {
   border-radius: 0;
