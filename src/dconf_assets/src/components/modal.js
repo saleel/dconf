@@ -24,8 +24,6 @@ function Modal(props) {
     >
       <h3 className="subtitle">{title}</h3>
 
-      <hr />
-
       <div className="modal-body">
         {children}
       </div>
@@ -35,7 +33,8 @@ function Modal(props) {
         className="modal-close"
         aria-label="close"
         onClick={() => onRequestClose(false)}
-      />
+      >+
+      </button>
     </ReactModal>
   );
 }

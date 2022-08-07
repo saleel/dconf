@@ -1,4 +1,7 @@
-@import "../../../node_modules/bulma/bulma.sass";
+@import "../../../node_modules/bulma/sass/base/_all.sass";
+@import "../../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../../node_modules/bulma/sass/grid/_all.sass";
+@import "../../../node_modules/bulma/sass/elements/table.sass";
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap");
 
 // Colors from Chakra UI https://chakra-ui.com/docs/theming/theme
@@ -224,10 +227,34 @@ body {
   border: 1px solid var(--text-color);
   font-weight: 500;
   font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.3rem 1rem;
 
   &:hover {
     background-color: var(--text-color);
     color: #fff;
+  }
+
+  &[disabled="disabled"], &[disabled="disabled"]:hover {
+    cursor: not-allowed;
+    background-color: #fff;
+    color: var(--text-color);
+  }
+}
+
+.ReactModal__Content {
+  border-radius: 0 !important;
+  border: 1px solid var(--text-color) !important;
+  padding: 0 !important;
+
+  .subtitle {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 0.5px solid var(--text-color);
+  }
+
+  .modal-body {
+    padding: 2rem;
   }
 }
 
@@ -237,6 +264,14 @@ body {
 
 .modal-close {
   background-color: var(--gray-400);
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: 0;
+  margin: 0;
+  background: none;
+  font-size: 1.5rem;
+  transform: rotateZ(45deg);
 }
 
 .form-input {

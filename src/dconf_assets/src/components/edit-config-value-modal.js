@@ -13,7 +13,9 @@ function EditConfigValueModal(props) {
 
   async function onFormSubmit(e) {
     e.preventDefault();
+    document.getElementById('edit-config-submit-button').setAttribute('disabled', 'disabled');
     await setConfigurationValue(application.id, environment.id, configuration.key, value);
+    document.getElementById('edit-config-submit-button').removeAttribute('disabled');
     onRequestClose();
   }
 
@@ -26,7 +28,7 @@ function EditConfigValueModal(props) {
     >
       <form className="form" onSubmit={onFormSubmit}>
         <input type="text" className="form-input" value={value} onChange={(e) => { setValue(e.target.value); }} />
-        <button type="submit">Submit</button>
+        <button id="edit-config-submit-button" className="button mt-5" type="submit">Submit</button>
       </form>
     </Modal>
   );
