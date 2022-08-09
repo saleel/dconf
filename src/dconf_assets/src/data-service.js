@@ -23,3 +23,8 @@ export async function setConfigurationValue(appId, envId, configKey, value) {
   const response = await canister.setConfigValue(appId, envId, configKey, value);
   return response.ok;
 }
+
+export async function createConfiguration(appId, { key, valueType, defaultValue }) {
+  const response = await canister.createConfiguration(appId, key, { [valueType]: null }, defaultValue);
+  return response.ok;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import usePromise from '../hooks/use-promise';
 import EditConfigValueModal from '../components/edit-config-value-modal';
 import { getApplication, getAllConfigValues } from '../data-service';
+import CreateConfigModal from '../components/create-config-modal';
 
 function HomePage() {
   React.useEffect(() => {
@@ -10,6 +11,7 @@ function HomePage() {
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
 
   const [application, { isFetching, error }] = usePromise(() => getApplication('chainlook'));
 
@@ -17,8 +19,6 @@ function HomePage() {
     conditions: [application],
     defaultValue: {},
   });
-
-  console.log(allConfigValues);
 
   if (isFetching || isFetchingValues) {
     return (<div>Loading</div>);
@@ -85,18 +85,26 @@ function HomePage() {
           </tbody>
         </table>
 
+        <button type="button" className="link" onClick={() => { setIsCreateModalOpen(true); }}>Create Configuration</button>
+
       </div>
 
       {selectedConfig.configuration && (
-      <EditConfigValueModal
-        isOpen={isEditModalOpen}
-        application={application}
-        onRequestClose={() => { setIsEditModalOpen(false); setSelectedConfig({}); reFetch(); }}
-        configuration={selectedConfig.configuration}
-        environment={selectedConfig.environment}
-        currentValue={selectedConfig.currentValue}
-      />
+        <EditConfigValueModal
+          isOpen={isEditModalOpen}
+          application={application}
+          onRequestClose={() => { setIsEditModalOpen(false); setSelectedConfig({}); reFetch(); }}
+          configuration={selectedConfig.configuration}
+          environment={selectedConfig.environment}
+          currentValue={selectedConfig.currentValue}
+        />
       )}
+
+      <CreateConfigModal
+        isOpen={isCreateModalOpen}
+        application={application}
+        onRequestClose={() => { setIsCreateModalOpen(false); reFetch(); }}
+      />
 
     </div>
   );

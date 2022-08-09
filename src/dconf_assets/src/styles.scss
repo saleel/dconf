@@ -2,6 +2,7 @@
 @import "../../../node_modules/bulma/sass/utilities/_all.sass";
 @import "../../../node_modules/bulma/sass/grid/_all.sass";
 @import "../../../node_modules/bulma/sass/elements/table.sass";
+@import "../../../node_modules/bulma/sass/elements/form.sass";
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap");
 
 // Colors from Chakra UI https://chakra-ui.com/docs/theming/theme
@@ -76,6 +77,10 @@ body {
   font-size: 1.1rem;
   font-weight: 500;
   color: var(--text-color);
+  background: none;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
 
   &:hover {
     color: var(--text-color);
@@ -192,7 +197,7 @@ body {
       }
 
       &:last-child {
-        td: {
+        td {
           border-bottom: none;
         }
       }
@@ -228,7 +233,7 @@ body {
   font-weight: 500;
   font-size: 1.1rem;
   cursor: pointer;
-  padding: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
 
   &:hover {
     background-color: var(--text-color);
@@ -248,13 +253,13 @@ body {
   padding: 0 !important;
 
   .subtitle {
-    padding: 1rem;
+    padding: 0.75rem 1.5rem;
     margin-bottom: 1rem;
     border-bottom: 0.5px solid var(--text-color);
   }
 
   .modal-body {
-    padding: 2rem;
+    padding: 1rem 1.5rem;
   }
 }
 
@@ -272,6 +277,12 @@ body {
   background: none;
   font-size: 1.5rem;
   transform: rotateZ(45deg);
+}
+
+.form {
+  button[type="submit"] {
+    margin-top: 1rem;
+  }
 }
 
 .form-input {
