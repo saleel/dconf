@@ -93,17 +93,28 @@ function HomePage() {
         <EditConfigValueModal
           isOpen={isEditModalOpen}
           application={application}
-          onRequestClose={() => { setIsEditModalOpen(false); setSelectedConfig({}); reFetch(); }}
           configuration={selectedConfig.configuration}
           environment={selectedConfig.environment}
           currentValue={selectedConfig.currentValue}
+          onRequestClose={(isUpdated) => {
+            setIsEditModalOpen(false);
+            setSelectedConfig({});
+            if (isUpdated) {
+              reFetch();
+            }
+          }}
         />
       )}
 
       <CreateConfigModal
         isOpen={isCreateModalOpen}
         application={application}
-        onRequestClose={() => { setIsCreateModalOpen(false); reFetch(); }}
+        onRequestClose={(isUpdated) => {
+          setIsCreateModalOpen(false);
+          if (isUpdated) {
+            reFetch();
+          }
+        }}
       />
 
     </div>
