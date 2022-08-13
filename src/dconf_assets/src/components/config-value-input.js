@@ -11,7 +11,7 @@ function ConfigValueInput(props) {
         type="text"
         className="form-input"
         value={value}
-        onChange={onChange}
+        onChange={(e) => { onChange(e.target.value); }}
       />
     );
   }
@@ -22,7 +22,7 @@ function ConfigValueInput(props) {
         type="number"
         className="form-input"
         value={value}
-        onChange={onChange}
+        onChange={(e) => { onChange(e.target.value); }}
       />
     );
   }
@@ -32,10 +32,10 @@ function ConfigValueInput(props) {
       <select
         className="form-input"
         value={value}
-        onChange={onChange}
+        onChange={(e) => { onChange(e.target.value); }}
       >
         <option value="true">True</option>
-        <option value="true">False</option>
+        <option value="false">False</option>
       </select>
     );
   }

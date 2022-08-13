@@ -1,26 +1,33 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import usePromise from '../hooks/use-promise';
 import EditConfigValueModal from '../components/edit-config-value-modal';
 import { getApplication, getAllConfigValues } from '../data-service';
 import CreateConfigModal from '../components/create-config-modal';
 
-function HomePage() {
-  React.useEffect(() => {
-    document.title = 'dconf';
-  }, []);
+function ApplicationPage() {
+  const { applicationId } = useParams();
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
 
-  const [application, { isFetching, error }] = usePromise(() => getApplication('chainlook'));
+  const [application, { isFetching, error }] = usePromise(() => getApplication(applicationId), {
+    conditions: [applicationId],
+    dependencies: [applicationId],
+  });
 
   const [allConfigValues, { isFetching: isFetchingValues, error: errorValues, reFetch }] = usePromise(() => getAllConfigValues(application), {
     conditions: [application],
-    defaultValue: {},
   });
 
-  if (isFetching || isFetchingValues) {
+  React.useEffect(() => {
+    if (application) {
+      document.title = `${application.name} Configuration Management - dconf`;
+    }
+  }, [application]);
+
+  if (isFetching || isFetchingValues || !allConfigValues) {
     return (<div>Loading</div>);
   }
 
@@ -121,4 +128,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default ApplicationPage;
