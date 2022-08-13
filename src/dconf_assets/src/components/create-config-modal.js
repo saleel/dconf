@@ -66,7 +66,7 @@ function CreateConfigModal(props) {
             <ConfigValueInput
               configuration={configuration}
               value={configuration.defaultValue}
-              onChange={(e) => { setConfiguration((ex) => ({ ...ex, defaultValue: e.target.value })); }}
+              onChange={(val) => { setConfiguration((ex) => ({ ...ex, defaultValue: val })); }}
             />
           </div>
         </div>
