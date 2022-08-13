@@ -32,7 +32,7 @@ function EditConfigValueModal(props) {
         <ConfigValueInput
           configuration={configuration}
           value={value}
-          onChange={(e) => { setValue(e.target.value); }}
+          onChange={(v) => { setValue(v); }}
         />
 
         <button id="edit-config-submit-button" className="button mt-5" type="submit">Submit</button>
