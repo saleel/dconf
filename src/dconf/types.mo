@@ -29,6 +29,7 @@ module {
       #boolean;
   };
 
+  // Type used as return for getAllConfigValues method
   public type ConfigurationValueForEnv = {
     key: Text;
     environmentId: Text;

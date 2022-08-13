@@ -5,10 +5,15 @@ import Trie "mo:base/Trie";
 import Types "./types";
 
 actor {
+  // Map to store all applications: appId -> app
   private stable var applications : Trie.Trie<Text, Types.Application> = Trie.empty();
+
+  // Map to store all config values: (appId, envId, configKey) -> value
   private stable var configurationValues : Trie.Trie<Text, Text> = Trie.empty();
 
+
   public shared(msg) func createApplication(id: Text, name: Text) : async Result.Result<Text, Text> {
+    // Check for existing app with same id
      switch (_getApplication(id)) {
       case null {
         let appKey = _getApplicationTrieKey(id);
@@ -38,6 +43,12 @@ actor {
      switch (_getApplication(appId)) {
         case null { return #err("Application not found") };
         case (?existingApp) {
+
+          // Ensure caller is app owner
+          if (msg.caller != existingApp.owner) {
+              return #err("Not the owner of the application");
+          };
+
           // Check for existing env with same name
           if (_getEnvironment(existingApp, envId) != null) {
               return #err("Another environment with same id already exist");
@@ -72,6 +83,12 @@ actor {
     switch (_getApplication(appId)) {
         case null { return #err("Application not found") };
         case (?existingApp) {
+
+          // Ensure caller is app owner
+          if (msg.caller != existingApp.owner) {
+              return #err("Not the owner of the application");
+          };
+
           // Check for existing env with same name
           if (_getConfiguration(existingApp, configKey) != null) {
               return #err("Another configuration with same key already exist");
@@ -108,6 +125,12 @@ actor {
     switch (_getApplication(appId)) {
       case null #err("No Application found with given id");
       case (?existingApp) {
+        
+        // Ensure caller is app owner
+        if (msg.caller != existingApp.owner) {
+            return #err("Not the owner of the application");
+        };
+
         // Ensure env exist
         let existingEnv = _getEnvironment(existingApp, envId);
         if (existingEnv == null) return #err("Env not found");
@@ -137,6 +160,7 @@ actor {
         let existingEnv = _getEnvironment(existingApp, envId);
         if (existingEnv == null) return #err("No Environment found with given id");
 
+        // Ensure configuration exist
         let existingConfig = _getConfiguration(existingApp, configId);
         if (existingConfig == null) return #err("No Configuration found with given id");
 
@@ -144,6 +168,7 @@ actor {
         let result = Trie.get(configurationValues, configurationValueTrieKey, Text.equal);
 
         switch (result) {
+          // return the default value if a value is not found for requested env
           case null {
             switch(existingConfig) {
               case (?config) #ok(config.defaultValue);
@@ -164,6 +189,7 @@ actor {
         let existingEnv = _getEnvironment(existingApp, envId);
         if (existingEnv == null) return #err("No Environment found with given id");
 
+        // Use .map on configurations
         let allConfigValues = Array.mapEntries<Types.Configuration, Types.ConfigurationValueForEnv>(
           existingApp.configurations, 
           func (config: Types.Configuration, index: Nat) : Types.ConfigurationValueForEnv {
@@ -174,6 +200,7 @@ actor {
               key = config.key;
               environmentId = envId;
               valueType = config.valueType;
+              // return default value if specific config not found for this env
               value = switch (result) { case(null) { config.defaultValue }; case(?configVal) { configVal };  };
             };
 
