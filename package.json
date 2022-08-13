@@ -6,7 +6,7 @@
     "build": "parcel build src/dconf_assets/index.html",
     "prebuild": "npm run copy:types && npm run inject-env",
     "start": "parcel src/dconf_assets/index.html",
-    "prestart": "npm run copy:types && npm run inject-env",
+    "prestart": "npm run copy:types && npm run inject-env && rm -rf .parcel-cache",
     "copy:types": "rsync -avr .dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --exclude='*.most' --delete src/declarations",
     "inject-env": "node ./inject-env"
   },
