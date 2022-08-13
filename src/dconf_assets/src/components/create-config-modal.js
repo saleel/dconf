@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { createConfiguration } from '../data-service';
+import ConfigValueInput from './config-value-input';
 import Modal from './modal';
 
 function CreateConfigModal(props) {
@@ -17,7 +18,7 @@ function CreateConfigModal(props) {
     document.getElementById('create-config-submit').setAttribute('disabled', 'disabled');
     await createConfiguration(application.id, configuration);
     document.getElementById('create-config-submit').removeAttribute('disabled');
-    onRequestClose();
+    onRequestClose(true);
   }
 
   return (
@@ -62,10 +63,8 @@ function CreateConfigModal(props) {
         <div className="field">
           <label htmlFor="configDefault" className="label">Default Value</label>
           <div className="control">
-            <input
-              id="configDefault"
-              className="input form-input"
-              type="text"
+            <ConfigValueInput
+              configuration={configuration}
               value={configuration.defaultValue}
               onChange={(e) => { setConfiguration((ex) => ({ ...ex, defaultValue: e.target.value })); }}
             />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { setConfigurationValue } from '../data-service';
+import ConfigValueInput from './config-value-input';
 import Modal from './modal';
 
 function EditConfigValueModal(props) {
@@ -16,7 +17,7 @@ function EditConfigValueModal(props) {
     document.getElementById('edit-config-submit-button').setAttribute('disabled', 'disabled');
     await setConfigurationValue(application.id, environment.id, configuration.key, value);
     document.getElementById('edit-config-submit-button').removeAttribute('disabled');
-    onRequestClose();
+    onRequestClose(true);
   }
 
   return (
@@ -27,8 +28,15 @@ function EditConfigValueModal(props) {
       title={title}
     >
       <form className="form" onSubmit={onFormSubmit}>
-        <input type="text" className="form-input" value={value} onChange={(e) => { setValue(e.target.value); }} />
+
+        <ConfigValueInput
+          configuration={configuration}
+          value={value}
+          onChange={(e) => { setValue(e.target.value); }}
+        />
+
         <button id="edit-config-submit-button" className="button mt-5" type="submit">Submit</button>
+
       </form>
     </Modal>
   );

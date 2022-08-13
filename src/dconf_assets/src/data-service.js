@@ -1,8 +1,21 @@
 import { dconf as canister } from '../../declarations/dconf';
 
+function sanitizeConfigurations(config) {
+  return ({
+    ...config,
+    valueType: Object.keys(config.valueType)[0],
+  });
+}
+
 export async function getApplication(applicationId) {
   const response = await canister.getApplication(applicationId);
-  return response.ok;
+  const application = response.ok;
+
+  if (!application) { return null; }
+
+  application.configurations = application.configurations.map(sanitizeConfigurations);
+
+  return application;
 }
 
 export async function getAllConfigValues(application) {
