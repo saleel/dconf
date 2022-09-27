@@ -4,13 +4,15 @@ import usePromise from '../hooks/use-promise';
 import EditConfigValueModal from '../components/edit-config-value-modal';
 import { getApplication, getAllConfigValues } from '../data-service';
 import CreateConfigModal from '../components/create-config-modal';
+import CreateEnvironmentModal from '../components/create-env-modal';
 
 function ApplicationPage() {
   const { applicationId } = useParams();
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+  const [isCreateConfigModalOpen, setIsCreateConfigModalOpen] = React.useState(false);
+  const [isCreateEnvironmentModalOpen, setIsCreateEnvironmentModalOpen] = React.useState(false);
 
   const [application, { isFetching, error }] = usePromise(() => getApplication(applicationId), {
     conditions: [applicationId],
@@ -92,7 +94,8 @@ function ApplicationPage() {
           </tbody>
         </table>
 
-        <button type="button" className="link" onClick={() => { setIsCreateModalOpen(true); }}>Create Configuration</button>
+        <button type="button" className="link mr-4" onClick={() => { setIsCreateEnvironmentModalOpen(true); }}>Create Environment</button>
+        <button type="button" className="link" onClick={() => { setIsCreateConfigModalOpen(true); }}>Create Configuration</button>
 
       </div>
 
@@ -114,10 +117,21 @@ function ApplicationPage() {
       )}
 
       <CreateConfigModal
-        isOpen={isCreateModalOpen}
+        isOpen={isCreateConfigModalOpen}
         application={application}
         onRequestClose={(isUpdated) => {
-          setIsCreateModalOpen(false);
+          setIsCreateConfigModalOpen(false);
+          if (isUpdated) {
+            reFetch();
+          }
+        }}
+      />
+
+      <CreateEnvironmentModal
+        isOpen={isCreateEnvironmentModalOpen}
+        application={application}
+        onRequestClose={(isUpdated) => {
+          setIsCreateEnvironmentModalOpen(false);
           if (isUpdated) {
             reFetch();
           }

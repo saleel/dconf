@@ -41,3 +41,8 @@ export async function createConfiguration(appId, { key, valueType, defaultValue 
   const response = await canister.createConfiguration(appId, key, { [valueType]: null }, defaultValue);
   return response.ok;
 }
+
+export async function createEnvironment(appId, { id, name }) {
+  const response = await canister.createEnvironment(appId, id, name);
+  return response.ok;
+}

@@ -236,7 +236,8 @@ actor {
     return { hash = Text.hash appId; key = appId };
   };
 
-   private func _getConfigurationValueTrieKey(appId: Text, envId: Text, configId: Text) : Trie.Key<Text> {
+  // Config values are stored as a map with key being appId+envId
+  private func _getConfigurationValueTrieKey(appId: Text, envId: Text, configId: Text) : Trie.Key<Text> {
     let concatId : Text = Text.concat(Text.concat(appId, envId), configId);
     return  { hash = Text.hash concatId; key = concatId };
   };
