@@ -213,6 +213,11 @@ actor {
     };
   };
 
+  public shared(msg) func getOwnedApplications() : async [Types.Application] {
+    var array = Trie.toArray(applications, func (key: Text, value: Types.Application) : Types.Application = value);
+    return Array.filter(array, func (a: Types.Application) : Bool = a.owner == msg.caller);
+  };
+
   public shared(msg) func getApplication(id: Text) : async Result.Result<Types.Application, Text> {
     switch (_getApplication(id)) {
       case null #err("No Application found with given id");
