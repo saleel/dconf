@@ -1,26 +1,33 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import usePromise from '../hooks/use-promise';
 import EditConfigValueModal from '../components/edit-config-value-modal';
-import { getApplication, getAllConfigValues } from '../data-service';
 import CreateConfigModal from '../components/create-config-modal';
 import CreateEnvironmentModal from '../components/create-env-modal';
+import useCanister from '../hooks/use-canister';
+import useInternetIdentity from '../hooks/use-internet-identity';
 
 function ApplicationPage() {
   const { applicationId } = useParams();
+
+  const { identity } = useInternetIdentity();
+  const navigate = useNavigate();
+
+  console.log(identity);
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [isCreateConfigModalOpen, setIsCreateConfigModalOpen] = React.useState(false);
   const [isCreateEnvironmentModalOpen, setIsCreateEnvironmentModalOpen] = React.useState(false);
 
+  const { getApplication, getAllConfigValues } = useCanister();
   const [application, { isFetching, error }] = usePromise(() => getApplication(applicationId), {
-    conditions: [applicationId],
+    conditions: [applicationId, identity],
     dependencies: [applicationId],
   });
 
   const [allConfigValues, { isFetching: isFetchingValues, error: errorValues, reFetch }] = usePromise(() => getAllConfigValues(application), {
-    conditions: [application],
+    conditions: [application, identity],
   });
 
   React.useEffect(() => {
@@ -28,6 +35,13 @@ function ApplicationPage() {
       document.title = `${application.name} Configuration Management - dconf`;
     }
   }, [application]);
+
+  // No logged in
+  if (!identity) {
+    // eslint-disable-next-line no-console
+    console.log('Not logged in. Redirecting to home page');
+    return navigate('/');
+  }
 
   if (isFetching || isFetchingValues || !allConfigValues) {
     return (<div>Loading</div>);

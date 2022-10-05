@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import useInternetIdentity from '../hooks/use-internet-identity';
 
 export default function Layout() {
+  const { identity, login, logout } = useInternetIdentity();
+
   return (
     <>
       <div className="header wrapper">
@@ -11,7 +14,17 @@ export default function Layout() {
           </Link>
         </h1>
 
-        <div className="menu" />
+        {identity ? (
+          <div>
+            <div className="menu">
+              <button type="button" onClick={logout}>Logout</button>
+            </div>
+          </div>
+        ) : (
+          <div className="menu">
+            <button type="button" onClick={login}>Login</button>
+          </div>
+        )}
 
       </div>
 

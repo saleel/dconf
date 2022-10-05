@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { createConfiguration } from '../data-service';
+import useCanister from '../hooks/use-canister';
 import ConfigValueInput from './config-value-input';
 import Modal from './modal';
 
@@ -10,6 +10,7 @@ function CreateConfigModal(props) {
   } = props;
 
   const [configuration, setConfiguration] = React.useState({ key: '', valueType: 'string', defaultValue: '' });
+  const { createConfiguration } = useCanister();
 
   const title = 'Add new configuration';
 

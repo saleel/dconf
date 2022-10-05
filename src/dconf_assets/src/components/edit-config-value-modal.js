@@ -1,5 +1,5 @@
 import React from 'react';
-import { setConfigurationValue } from '../data-service';
+import useCanister from '../hooks/use-canister';
 import ConfigValueInput from './config-value-input';
 import Modal from './modal';
 
@@ -9,6 +9,7 @@ function EditConfigValueModal(props) {
   } = props;
 
   const [value, setValue] = React.useState(currentValue);
+  const { setConfigurationValue } = useCanister();
 
   const title = `Edit ${configuration.key} on ${environment.name}`;
 

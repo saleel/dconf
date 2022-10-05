@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { createEnvironment } from '../data-service';
 import Modal from './modal';
 import { sanitize } from '../utils';
+import useCanister from '../hooks/use-canister';
 
 function CreateEnvironmentModal(props) {
   const {
@@ -10,6 +10,7 @@ function CreateEnvironmentModal(props) {
   } = props;
 
   const [environment, setEnvironment] = React.useState({ id: '', name: '' });
+  const { createEnvironment } = useCanister();
 
   const title = 'Add new environment';
 
