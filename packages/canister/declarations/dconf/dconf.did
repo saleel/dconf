@@ -54,5 +54,6 @@ service : {
   getAllConfigValues: (text, text) -> (Result_2);
   getApplication: (text) -> (Result_1);
   getConfigValue: (text, text, text) -> (Result);
+  getOwnedApplications: () -> (vec Application);
   setConfigValue: (text, text, text, text) -> (Result);
 }

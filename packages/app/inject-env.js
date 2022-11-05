@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 const path = require('path');
 const fs = require('fs');
 
@@ -6,6 +9,7 @@ function initCanisterEnv() {
     prodCanisters;
   try {
     localCanisters = require(path.resolve(
+      '../../',
       '.dfx',
       'local',
       'canister_ids.json',

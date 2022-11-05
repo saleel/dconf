@@ -15,6 +15,7 @@ export default function useInternetIdentity() {
       authClient.login({
         onSuccess: resolve,
         onError: reject,
+        identityProvider: 'http://localhost:8000?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai',
       });
     });
 

@@ -1,0 +1,42 @@
+{
+  "name": "@dconf/app",
+  "version": "0.1.0",
+  "description": "Decentralized configuration management",
+  "scripts": {
+    "build": "parcel build ./index.html",
+    "prebuild": "npm run copy:types && npm run inject-env",
+    "start": "parcel ./index.html",
+    "prestart": "npm run copy:types && npm run inject-env && rm -rf .parcel-cache",
+    "copy:types": "rsync -avr ../../.dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --exclude='*.most' --delete src/declarations",
+    "inject-env": "node ./inject-env"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.7.0"
+  },
+  "engines": {
+    "node": "^12 || ^14 || ^16 || ^18"
+  },
+  "browserslist": [
+    "last 2 chrome version",
+    "last 2 firefox version",
+    "last 2 safari version",
+    "last 2 edge version"
+  ],
+  "dependencies": {
+    "@dfinity/agent": "^0.12.0",
+    "@dfinity/auth-client": "^0.13.3",
+    "@dfinity/authentication": "^0.13.3",
+    "@dfinity/candid": "^0.14.0",
+    "@dfinity/identity": "^0.13.3",
+    "@dfinity/principal": "^0.14.0",
+    "bulma": "^0.9.4",
+    "candid": "dfinity/candid",
+    "date-fns": "^2.29.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-modal": "^3.15.1",
+    "react-router-dom": "^6.3.0"
+  }
+}

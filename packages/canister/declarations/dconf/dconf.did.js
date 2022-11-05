@@ -46,6 +46,7 @@ export const idlFactory = ({ IDL }) => {
     'getAllConfigValues' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
     'getApplication' : IDL.Func([IDL.Text], [Result_1], []),
     'getConfigValue' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [Result], []),
+    'getOwnedApplications' : IDL.Func([], [IDL.Vec(Application)], []),
     'setConfigValue' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [Result],

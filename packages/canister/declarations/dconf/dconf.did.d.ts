@@ -41,5 +41,6 @@ export interface _SERVICE {
   'getAllConfigValues' : ActorMethod<[string, string], Result_2>,
   'getApplication' : ActorMethod<[string], Result_1>,
   'getConfigValue' : ActorMethod<[string, string, string], Result>,
+  'getOwnedApplications' : ActorMethod<[], Array<Application>>,
   'setConfigValue' : ActorMethod<[string, string, string, string], Result>,
 }

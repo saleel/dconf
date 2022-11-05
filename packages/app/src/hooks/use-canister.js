@@ -1,5 +1,5 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { idlFactory } from '../../../declarations/dconf/dconf.did.js';
+import { idlFactory } from '../../../canister/declarations/dconf/dconf.did.js';
 import useInternetIdentity from './use-internet-identity';
 
 function sanitizeConfigurations(config) {
@@ -18,10 +18,21 @@ export default function useCanister() {
 
   const agent = new HttpAgent({ identity });
 
+  agent.fetchRootKey();
+
   const actor = Actor.createActor(idlFactory, {
     agent,
     canisterId: process.env.DCONF_CANISTER_ID,
   });
+
+  async function getOwnedApplications() {
+    const response = await actor.getOwnedApplications();
+    const applications = response.ok;
+
+    if (!applications) { return []; }
+
+    return applications;
+  }
 
   async function getApplication(applicationId) {
     const response = await actor.getApplication(applicationId);
@@ -64,6 +75,7 @@ export default function useCanister() {
   }
 
   return {
+    getOwnedApplications,
     getApplication,
     getAllConfigValues,
     setConfigurationValue,
