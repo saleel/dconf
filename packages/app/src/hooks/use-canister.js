@@ -74,8 +74,14 @@ export default function useCanister() {
     return response.ok;
   }
 
+  async function createApplication({ id, name }) {
+    const response = await actor.createApplication(id, name);
+    return response.ok;
+  }
+
   return {
     getOwnedApplications,
+    createApplication,
     getApplication,
     getAllConfigValues,
     setConfigurationValue,

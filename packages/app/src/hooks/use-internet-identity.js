@@ -15,7 +15,9 @@ export default function useInternetIdentity() {
       authClient.login({
         onSuccess: resolve,
         onError: reject,
-        identityProvider: 'http://localhost:8000?canisterId=rwlgt-iiaaa-aaaaa-aaaaa-cai',
+        identityProvider: process.env.DFX_NETWORK === 'ic'
+          ? 'https://identity.ic0.app/#authorize'
+          : `http://localhost:8000?canisterId=${process.env.LOCAL_II_CANISTER_ID}`,
       });
     });
 
