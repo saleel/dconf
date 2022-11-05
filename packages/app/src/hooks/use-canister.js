@@ -1,6 +1,8 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { idlFactory } from '../../../canister/declarations/dconf/dconf.did.js';
-import useInternetIdentity from './use-internet-identity';
+import { useContext } from 'react';
+// eslint-disable-next-line import/no-relative-packages
+import { idlFactory } from '../declarations/dconf/dconf.did.js';
+import { IdentityContext } from '../context';
 
 function sanitizeConfigurations(config) {
   return ({
@@ -9,32 +11,41 @@ function sanitizeConfigurations(config) {
   });
 }
 
-/**
- *
- * @param {import("@dfinity/agent").Identity} identity
- */
 export default function useCanister() {
-  const { identity } = useInternetIdentity();
+  /** @type {{ identity: import("@dfinity/agent").Identity }} * */
+  const { identity } = useContext(IdentityContext);
 
-  const agent = new HttpAgent({ identity });
+  async function getActor() {
+    if (!identity) {
+      throw new Error('Identity not set. Login required');
+    }
 
-  agent.fetchRootKey();
+    const agent = new HttpAgent({ identity });
 
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: process.env.DCONF_CANISTER_ID,
-  });
+    const actor = Actor.createActor(idlFactory, {
+      agent,
+      canisterId: process.env.DCONF_CANISTER_ID,
+    });
+
+    // eslint-disable-next-line no-underscore-dangle
+    if (!agent._rootKeyFetched) {
+      await agent.fetchRootKey();
+    }
+
+    return actor;
+  }
 
   async function getOwnedApplications() {
+    const actor = await getActor();
     const response = await actor.getOwnedApplications();
-    const applications = response.ok;
 
-    if (!applications) { return []; }
+    const applications = response.ok;
 
     return applications;
   }
 
   async function getApplication(applicationId) {
+    const actor = await getActor();
     const response = await actor.getApplication(applicationId);
     const application = response.ok;
 
@@ -46,6 +57,7 @@ export default function useCanister() {
   }
 
   async function getAllConfigValues(application) {
+    const actor = await getActor();
     const allEnvs = await Promise.all(
       application.environments.map(
         (env) => actor.getAllConfigValues(application.id, env.id).then((r) => r.ok),
@@ -60,21 +72,25 @@ export default function useCanister() {
   }
 
   async function setConfigurationValue(appId, envId, configKey, value) {
+    const actor = await getActor();
     const response = await actor.setConfigValue(appId, envId, configKey, value);
     return response.ok;
   }
 
   async function createConfiguration(appId, { key, valueType, defaultValue }) {
+    const actor = await getActor();
     const response = await actor.createConfiguration(appId, key, { [valueType]: null }, defaultValue);
     return response.ok;
   }
 
   async function createEnvironment(appId, { id, name }) {
+    const actor = await getActor();
     const response = await actor.createEnvironment(appId, id, name);
     return response.ok;
   }
 
   async function createApplication({ id, name }) {
+    const actor = await getActor();
     const response = await actor.createApplication(id, name);
     return response.ok;
   }

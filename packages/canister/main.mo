@@ -2,6 +2,8 @@ import Array "mo:base/Array";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
+import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
 import Types "./types";
 
 actor {
@@ -11,10 +13,9 @@ actor {
   // Map to store all config values: (appId, envId, configKey) -> value
   private stable var configurationValues : Trie.Trie<Text, Text> = Trie.empty();
 
-
-  public shared(msg) func createApplication(id: Text, name: Text) : async Result.Result<Text, Text> {
+  public shared (msg) func createApplication(id : Text, name : Text) : async Result.Result<Text, Text> {
     // Check for existing app with same id
-     switch (_getApplication(id)) {
+    switch (_getApplication(id)) {
       case null {
         let appKey = _getApplicationTrieKey(id);
 
@@ -39,96 +40,96 @@ actor {
     };
   };
 
-  public shared(msg) func createEnvironment(appId: Text, envId: Text, name: Text) : async Result.Result<Text, Text> {
-     switch (_getApplication(appId)) {
-        case null { return #err("Application not found") };
-        case (?existingApp) {
-
-          // Ensure caller is app owner
-          if (msg.caller != existingApp.owner) {
-              return #err("Not the owner of the application");
-          };
-
-          // Check for existing env with same name
-          if (_getEnvironment(existingApp, envId) != null) {
-              return #err("Another environment with same id already exist");
-          };
-
-          let environment : Types.Environment = {
-            id = envId;
-            name = name;
-          };
-
-          let newApplication : Types.Application = {
-            id = existingApp.id;
-            name = existingApp.name;
-            owner = existingApp.owner;
-            environments = Array.append(existingApp.environments, [environment]);
-            configurations = existingApp.configurations;
-          };
-
-          applications := Trie.replace(
-            applications,
-            _getApplicationTrieKey(appId),
-            Text.equal,
-            ?newApplication,
-          ).0;
-
-          return #ok(envId);
-        }
-     };
-  };
-
-  public shared(msg) func createConfiguration(appId: Text, configKey: Text, valueType: Types.ConfigurationTypes, defaultValue: Text) : async Result.Result<Text, Text> {
+  public shared (msg) func createEnvironment(appId : Text, envId : Text, name : Text) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
-        case null { return #err("Application not found") };
-        case (?existingApp) {
+      case null { return #err("Application not found") };
+      case (?existingApp) {
 
-          // Ensure caller is app owner
-          if (msg.caller != existingApp.owner) {
-              return #err("Not the owner of the application");
-          };
+        // Ensure caller is app owner
+        if (msg.caller != existingApp.owner) {
+          return #err("Not the owner of the application");
+        };
 
-          // Check for existing env with same name
-          if (_getConfiguration(existingApp, configKey) != null) {
-              return #err("Another configuration with same key already exist");
-          };
+        // Check for existing env with same name
+        if (_getEnvironment(existingApp, envId) != null) {
+          return #err("Another environment with same id already exist");
+        };
 
-          let configuration : Types.Configuration = {
-            key= configKey;
-            applicationId= appId;
-            defaultValue = defaultValue;
-            valueType = valueType;
-          };
+        let environment : Types.Environment = {
+          id = envId;
+          name = name;
+        };
 
-          let newApplication : Types.Application = {
-            id = existingApp.id;
-            name = existingApp.name;
-            owner = existingApp.owner;
-            environments = existingApp.environments;
-            configurations = Array.append(existingApp.configurations, [configuration]);
-          };
+        let newApplication : Types.Application = {
+          id = existingApp.id;
+          name = existingApp.name;
+          owner = existingApp.owner;
+          environments = Array.append(existingApp.environments, [environment]);
+          configurations = existingApp.configurations;
+        };
 
-          applications := Trie.replace(
-            applications,
-            _getApplicationTrieKey(appId),
-            Text.equal,
-            ?newApplication,
-          ).0;
+        applications := Trie.replace(
+          applications,
+          _getApplicationTrieKey(appId),
+          Text.equal,
+          ?newApplication,
+        ).0;
 
-          return #ok(configKey);
-        }
-     };
+        return #ok(envId);
+      };
+    };
   };
 
-  public shared(msg) func setConfigValue(appId: Text, envId: Text, configId: Text, value: Text) : async Result.Result<Text, Text> {
+  public shared (msg) func createConfiguration(appId : Text, configKey : Text, valueType : Types.ConfigurationTypes, defaultValue : Text) : async Result.Result<Text, Text> {
+    switch (_getApplication(appId)) {
+      case null { return #err("Application not found") };
+      case (?existingApp) {
+
+        // Ensure caller is app owner
+        if (msg.caller != existingApp.owner) {
+          return #err("Not the owner of the application");
+        };
+
+        // Check for existing env with same name
+        if (_getConfiguration(existingApp, configKey) != null) {
+          return #err("Another configuration with same key already exist");
+        };
+
+        let configuration : Types.Configuration = {
+          key = configKey;
+          applicationId = appId;
+          defaultValue = defaultValue;
+          valueType = valueType;
+        };
+
+        let newApplication : Types.Application = {
+          id = existingApp.id;
+          name = existingApp.name;
+          owner = existingApp.owner;
+          environments = existingApp.environments;
+          configurations = Array.append(existingApp.configurations, [configuration]);
+        };
+
+        applications := Trie.replace(
+          applications,
+          _getApplicationTrieKey(appId),
+          Text.equal,
+          ?newApplication,
+        ).0;
+
+        return #ok(configKey);
+      };
+    };
+  };
+
+  public shared (msg) func setConfigValue(appId : Text, envId : Text, configId : Text, value : Text) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
       case null #err("No Application found with given id");
       case (?existingApp) {
-        
+
         // Ensure caller is app owner
         if (msg.caller != existingApp.owner) {
-            return #err("Not the owner of the application");
+          return #err("Not the owner of the application");
         };
 
         // Ensure env exist
@@ -148,11 +149,11 @@ actor {
         ).0;
 
         return #ok(configurationValueTrieKey.key);
-      }
+      };
     };
   };
 
-  public func getConfigValue(appId: Text, envId: Text, configId: Text) : async Result.Result<Text, Text> {
+  public func getConfigValue(appId : Text, envId : Text, configId : Text) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
       case null #err("No Application found with given id");
       case (?existingApp) {
@@ -170,18 +171,18 @@ actor {
         switch (result) {
           // return the default value if a value is not found for requested env
           case null {
-            switch(existingConfig) {
+            switch (existingConfig) {
               case (?config) #ok(config.defaultValue);
               case null #err("No value or defaultValue");
-            }
+            };
           };
           case (?resultValue) #ok(resultValue);
-        }
-      }
+        };
+      };
     };
   };
 
-  public func getAllConfigValues(appId: Text, envId: Text) : async Result.Result<[Types.ConfigurationValueForEnv], Text> {
+  public func getAllConfigValues(appId : Text, envId : Text) : async Result.Result<[Types.ConfigurationValueForEnv], Text> {
     switch (_getApplication(appId)) {
       case null #err("No Application found with given id");
       case (?existingApp) {
@@ -191,8 +192,8 @@ actor {
 
         // Use .map on configurations
         let allConfigValues = Array.mapEntries<Types.Configuration, Types.ConfigurationValueForEnv>(
-          existingApp.configurations, 
-          func (config: Types.Configuration, index: Nat) : Types.ConfigurationValueForEnv {
+          existingApp.configurations,
+          func(config : Types.Configuration, index : Nat) : Types.ConfigurationValueForEnv {
             let configurationValueTrieKey = _getConfigurationValueTrieKey(appId, envId, config.key);
             let result = Trie.get(configurationValues, configurationValueTrieKey, Text.equal);
 
@@ -201,24 +202,29 @@ actor {
               environmentId = envId;
               valueType = config.valueType;
               // return default value if specific config not found for this env
-              value = switch (result) { case(null) { config.defaultValue }; case(?configVal) { configVal };  };
+              value = switch (result) {
+                case (null) { config.defaultValue };
+                case (?configVal) { configVal };
+              };
             };
 
             return configurationValueForEnv;
-          }
+          },
         );
 
         return #ok(allConfigValues);
-      }
+      };
     };
   };
 
-  public shared(msg) func getOwnedApplications() : async [Types.Application] {
-    var array = Trie.toArray(applications, func (key: Text, value: Types.Application) : Types.Application = value);
-    return Array.filter(array, func (a: Types.Application) : Bool = a.owner == msg.caller);
+  public shared (msg) func getOwnedApplications() : async  Result.Result<[Types.Application], Text> {
+    var array = Trie.toArray(applications, func(key : Text, value : Types.Application) : Types.Application = value);
+    var filtered = Array.filter(array, func(a : Types.Application) : Bool = a.owner == msg.caller);
+
+    #ok(filtered);
   };
 
-  public shared(msg) func getApplication(id: Text) : async Result.Result<Types.Application, Text> {
+  public shared (msg) func getApplication(id : Text) : async Result.Result<Types.Application, Text> {
     switch (_getApplication(id)) {
       case null #err("No Application found with given id");
       case (?existingApp) #ok(existingApp);
@@ -229,12 +235,12 @@ actor {
     return Trie.find(applications, _getApplicationTrieKey(appId), Text.equal);
   };
 
-  private func _getEnvironment(app : Types.Application, envId: Text) : ?Types.Environment {
-    return Array.find(app.environments, func (e : Types.Environment) : Bool = e.id == envId);
+  private func _getEnvironment(app : Types.Application, envId : Text) : ?Types.Environment {
+    return Array.find(app.environments, func(e : Types.Environment) : Bool = e.id == envId);
   };
 
-  private func _getConfiguration(app : Types.Application, configKey: Text) : ?Types.Configuration {
-    return Array.find(app.configurations, func (e : Types.Configuration) : Bool = e.key == configKey)
+  private func _getConfiguration(app : Types.Application, configKey : Text) : ?Types.Configuration {
+    return Array.find(app.configurations, func(e : Types.Configuration) : Bool = e.key == configKey);
   };
 
   private func _getApplicationTrieKey(appId : Text) : Trie.Key<Text> {
@@ -242,8 +248,8 @@ actor {
   };
 
   // Config values are stored as a map with key being appId+envId
-  private func _getConfigurationValueTrieKey(appId: Text, envId: Text, configId: Text) : Trie.Key<Text> {
+  private func _getConfigurationValueTrieKey(appId : Text, envId : Text, configId : Text) : Trie.Key<Text> {
     let concatId : Text = Text.concat(Text.concat(appId, envId), configId);
-    return  { hash = Text.hash concatId; key = concatId };
+    return { hash = Text.hash concatId; key = concatId };
   };
 };

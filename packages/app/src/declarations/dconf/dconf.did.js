@@ -11,7 +11,7 @@ export const idlFactory = ({ IDL }) => {
     'valueType' : ConfigurationTypes,
     'environmentId' : IDL.Text,
   });
-  const Result_2 = IDL.Variant({
+  const Result_3 = IDL.Variant({
     'ok' : IDL.Vec(ConfigurationValueForEnv),
     'err' : IDL.Text,
   });
@@ -30,7 +30,11 @@ export const idlFactory = ({ IDL }) => {
     'configurations' : ConfigurationList,
     'environments' : EnvironmentList,
   });
-  const Result_1 = IDL.Variant({ 'ok' : Application, 'err' : IDL.Text });
+  const Result_2 = IDL.Variant({ 'ok' : Application, 'err' : IDL.Text });
+  const Result_1 = IDL.Variant({
+    'ok' : IDL.Vec(Application),
+    'err' : IDL.Text,
+  });
   return IDL.Service({
     'createApplication' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'createConfiguration' : IDL.Func(
@@ -43,10 +47,10 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
-    'getAllConfigValues' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
-    'getApplication' : IDL.Func([IDL.Text], [Result_1], []),
+    'getAllConfigValues' : IDL.Func([IDL.Text, IDL.Text], [Result_3], []),
+    'getApplication' : IDL.Func([IDL.Text], [Result_2], []),
     'getConfigValue' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [Result], []),
-    'getOwnedApplications' : IDL.Func([], [IDL.Vec(Application)], []),
+    'getOwnedApplications' : IDL.Func([], [Result_1], []),
     'setConfigValue' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [Result],

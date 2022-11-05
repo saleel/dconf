@@ -8,6 +8,7 @@ function CreateApplicationModal(props) {
   const { isOpen, onRequestClose } = props;
 
   const [application, setApplication] = React.useState({ id: '', name: '' });
+
   const { createApplication } = useCanister();
 
   const title = 'Add new application';
@@ -15,7 +16,7 @@ function CreateApplicationModal(props) {
   async function onFormSubmit(e) {
     e.preventDefault();
     document.getElementById('create-application-submit').setAttribute('disabled', 'disabled');
-    await createApplication(application.id, application);
+    await createApplication(application);
     document.getElementById('create-application-submit').removeAttribute('disabled');
     onRequestClose(true);
   }

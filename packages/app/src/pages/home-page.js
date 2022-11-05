@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useCanister from '../hooks/use-canister';
-import useInternetIdentity from '../hooks/use-internet-identity';
+import { IdentityContext } from '../context';
 import usePromise from '../hooks/use-promise';
 import CreateApplicationModal from '../components/create-application-modal';
 
 function HomePage() {
   const [showCreateApplicationModal, setShowCreateApplicationModal] = useState();
 
-  const { identity, login } = useInternetIdentity();
+  const { identity, login } = useContext(IdentityContext);
 
   const { getOwnedApplications } = useCanister();
 
-  const [applications, { isFetching, error }] = usePromise(() => getOwnedApplications(), {
+  const [applications, { isFetching, error, reFetch }] = usePromise(() => getOwnedApplications(), {
     conditions: [identity],
     dependencies: [identity],
     defaultValue: [],
   });
 
+  // console.log(applications);
   function renderLoginView() {
     return (
       <div className="section">
@@ -66,10 +67,18 @@ function HomePage() {
   function renderApplicationListView() {
     return (
       <div>
+        <div className="section-title">Your Applications</div>
+
         {applications.map((application) => (
-          <div>
-            <Link to={`/${application.id}`}>{application.name}</Link>
-          </div>
+          <Link to={`/application/${application.id}`}>
+            <div key={application.id} className="application-box">
+              <div className="application-name">{application.name}</div>
+              <div>
+                <div>{application.environments.length} environments</div>
+                <div>{application.configurations.length} configurations</div>
+              </div>
+            </div>
+          </Link>
         ))}
       </div>
     );
@@ -102,7 +111,7 @@ function HomePage() {
 
         <CreateApplicationModal
           isOpen={showCreateApplicationModal}
-          onRequestClose={() => setShowCreateApplicationModal(false)}
+          onRequestClose={() => { setShowCreateApplicationModal(false); reFetch(); }}
         />
 
       </div>

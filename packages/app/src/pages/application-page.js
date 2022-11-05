@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import usePromise from '../hooks/use-promise';
 import EditConfigValueModal from '../components/edit-config-value-modal';
 import CreateConfigModal from '../components/create-config-modal';
 import CreateEnvironmentModal from '../components/create-env-modal';
 import useCanister from '../hooks/use-canister';
-import useInternetIdentity from '../hooks/use-internet-identity';
+import { IdentityContext } from '../context';
 
 function ApplicationPage() {
   const { applicationId } = useParams();
 
-  const { identity } = useInternetIdentity();
+  const { identity } = useContext(IdentityContext);
   const navigate = useNavigate();
-
-  console.log(identity);
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -22,12 +20,12 @@ function ApplicationPage() {
 
   const { getApplication, getAllConfigValues } = useCanister();
   const [application, { isFetching, error }] = usePromise(() => getApplication(applicationId), {
-    conditions: [applicationId, identity],
+    conditions: [applicationId],
     dependencies: [applicationId],
   });
 
   const [allConfigValues, { isFetching: isFetchingValues, error: errorValues, reFetch }] = usePromise(() => getAllConfigValues(application), {
-    conditions: [application, identity],
+    conditions: [application],
   });
 
   React.useEffect(() => {

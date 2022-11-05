@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import useInternetIdentity from '../hooks/use-internet-identity';
+import { IdentityContext } from '../context';
 
 export default function Layout() {
-  const { identity, login, logout } = useInternetIdentity();
+  const { identity, login, logout } = React.useContext(IdentityContext);
 
   return (
     <>
