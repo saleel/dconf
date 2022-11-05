@@ -17,12 +17,12 @@ export default function Layout() {
         {identity ? (
           <div>
             <div className="menu">
-              <button type="button" onClick={logout}>Logout</button>
+              <button type="button" className="button" onClick={logout}>Logout</button>
             </div>
           </div>
         ) : (
           <div className="menu">
-            <button type="button" onClick={login}>Login</button>
+            <button type="button" className="button" onClick={login}>Login</button>
           </div>
         )}
 

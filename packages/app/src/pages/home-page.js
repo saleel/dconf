@@ -25,17 +25,17 @@ function HomePage() {
         <div className="section-title">Login with Internet Identity</div>
 
         <div>
+          <p>dconf is a decentralized platform for managing application configuration. You can define configurations and set values for each environment within your application.</p>
           <p>
             <span>
               dconf use <a target="_blank" rel="noreferrer" href="https://internetcomputer.org/">Internet Computer</a>
             </span>
-            <span> to store configuration data and </span>
-            <a target="_blank" rel="noreferrer" href="https://internetcomputer.org/docs/current/tokenomics/identity-auth/what-is-ic-identity/">Internet Identity</a>
-            <span> for authentication.</span>
+            <span> to store configuration data ensuring high availability.</span> You can use dconf SDKs for NodeJS and React to seamlessly retrieve config values in your application.
           </p>
           <p>
-            Configurations you create in dconf are tied to your Internet Identity account and only would be able to
-            update and remove configuration values.
+            <a target="_blank" rel="noreferrer" href="https://internetcomputer.org/docs/current/tokenomics/identity-auth/what-is-ic-identity/">Internet Identity</a>
+            <span> for authentication and the data you store is tied to your Internet Identity account.
+            </span>
           </p>
           <p>
             Login with Internet Identity to continue.
