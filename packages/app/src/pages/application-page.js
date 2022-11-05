@@ -42,11 +42,11 @@ function ApplicationPage() {
   }
 
   if (isFetching || isFetchingValues || !allConfigValues) {
-    return (<div>Loading</div>);
+    return (<div className="section loading" style={{ height: '200px' }} />);
   }
 
   if (error || errorValues) {
-    return (<div>{(error || errorValues).message}</div>);
+    return (<div className="section">{(error || errorValues).message}</div>);
   }
 
   if (!application) {
@@ -55,61 +55,100 @@ function ApplicationPage() {
 
   const { name, environments = [], configurations = [] } = application;
 
+  function renderNoConfigurationView() {
+    return (
+      <div className="section">
+        <div className="section-title">Create first configuration</div>
+
+        <p>
+          You do not have any configurations defined under your application.
+        </p>
+        <p>
+          Start by creating your first one.
+        </p>
+
+        <button type="button" className="button mt-2" onClick={() => { setIsCreateConfigModalOpen(true); }}>Create Configuration</button>
+      </div>
+    );
+  }
+
+  function renderNoEnvironmentView() {
+    return (
+      <div className="section">
+        <div className="section-title">Create first environment</div>
+
+        <p>
+          You can define environments within your application like Staging, Production and have configuration values per environment.
+        </p>
+        <p>
+          You need at-least one environment created to start creating configurations.
+        </p>
+
+        <button type="button" className="button mt-2" onClick={() => { setIsCreateEnvironmentModalOpen(true); }}>Create Environment</button>
+      </div>
+    );
+  }
+
   return (
     <div className="page home-page">
 
-      <div className="section-title mb-5">
+      <div className="section-title">
         Configuration Management for {name}
       </div>
 
-      <div className="table-container">
+      {environments.length === 0 && renderNoEnvironmentView()}
+      {configurations.length === 0 && renderNoConfigurationView()}
 
-        <table className="table config-table">
-          <thead>
-            <tr>
-              <th>Config Key</th>
-              {(environments).map((environment) => (
-                <th key={environment.id}>
-                  {environment.name || environment.id}
-                </th>
-              ))}
-            </tr>
-          </thead>
+      {environments.length > 0 && configurations.length > 0 && (
+        <div className="table-container">
 
-          <tbody>
-            {configurations.map((conf, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <tr key={i}>
-                <td>{conf.key}</td>
-                {environments.map((env) => {
-                  const value = allConfigValues[env.id]?.find((c) => c.key === conf.key)?.value;
-
-                  return (
-                    <td key={env.id}>
-                      {value ?? ''}
-
-                      <button
-                        type="button"
-                        className="icon-button btn-edit-config"
-                        onClick={() => {
-                          setSelectedConfig({ environment: env, configuration: conf, currentValue: value });
-                          setIsEditModalOpen(true);
-                        }}
-                      >
-                        <i className="icon icon-pencil" />
-                      </button>
-                    </td>
-                  );
-                })}
+          <table className="table config-table">
+            <thead>
+              <tr>
+                <th>Config Key</th>
+                {(environments).map((environment) => (
+                  <th key={environment.id}>
+                    {environment.name || environment.id}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
 
-        <button type="button" className="link mr-4" onClick={() => { setIsCreateEnvironmentModalOpen(true); }}>Create Environment</button>
-        <button type="button" className="link" onClick={() => { setIsCreateConfigModalOpen(true); }}>Create Configuration</button>
+            <tbody>
+              {configurations.map((conf, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <tr key={i}>
+                  <td>{conf.key}</td>
+                  {environments.map((env) => {
+                    const value = allConfigValues[env.id]?.find((c) => c.key === conf.key)?.value;
 
-      </div>
+                    return (
+                      <td key={env.id}>
+                        {value ?? ''}
+
+                        <button
+                          type="button"
+                          className="icon-button btn-edit-config"
+                          onClick={() => {
+                            setSelectedConfig({ environment: env, configuration: conf, currentValue: value });
+                            setIsEditModalOpen(true);
+                          }}
+                        >
+                          <i className="icon icon-pencil" />
+                        </button>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <button type="button" className="button mr-4" onClick={() => { setIsCreateEnvironmentModalOpen(true); }}>Create Environment</button>
+          <button type="button" className="button" onClick={() => { setIsCreateConfigModalOpen(true); }}>Create Configuration</button>
+
+        </div>
+      )}
 
       {selectedConfig.configuration && (
         <EditConfigValueModal

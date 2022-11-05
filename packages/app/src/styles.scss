@@ -226,12 +226,12 @@ p {
 .table {
   width: 100%;
   border: 1px solid var(--text-color);
-
+  
   thead {
     width: 100%;
 
     th {
-      background-color: var(--gray-300);
+      background-color: var(--gray-200);
       position: sticky;
       top: 0;
       z-index: 1;
