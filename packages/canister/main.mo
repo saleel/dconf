@@ -80,7 +80,7 @@ actor {
     };
   };
 
-  public shared (msg) func createConfiguration(appId : Text, configKey : Text, valueType : Types.ConfigurationTypes, defaultValue : Text) : async Result.Result<Text, Text> {
+  public shared (msg) func createConfiguration(appId : Text, configKey : Text, valueType : Types.ConfigurationTypes, defaultValue : Text, isPrivate: Bool) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
       case null { return #err("Application not found") };
       case (?existingApp) {
@@ -100,6 +100,7 @@ actor {
           applicationId = appId;
           defaultValue = defaultValue;
           valueType = valueType;
+          isPrivate = isPrivate;
         };
 
         let newApplication : Types.Application = {
@@ -201,6 +202,7 @@ actor {
               key = config.key;
               environmentId = envId;
               valueType = config.valueType;
+              isPrivate = config.isPrivate;
               // return default value if specific config not found for this env
               value = switch (result) {
                 case (null) { config.defaultValue };

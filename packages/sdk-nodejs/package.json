@@ -12,6 +12,7 @@
     "test": "node test"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
     "typescript": "^4.8.4"
   },
   "engines": {
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@dfinity/agent": "^0.12.0",
+    "crypto-js": "^4.1.1",
     "node-fetch": "^2.6.7"
   }
 }

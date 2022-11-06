@@ -27,6 +27,7 @@ type Environment =
 type ConfigurationValueForEnv = 
  record {
    environmentId: text;
+   isPrivate: bool;
    key: text;
    value: text;
    valueType: ConfigurationTypes;
@@ -41,6 +42,7 @@ type ConfigurationList = vec Configuration;
 type Configuration = 
  record {
    defaultValue: text;
+   isPrivate: bool;
    key: text;
    valueType: ConfigurationTypes;
  };
@@ -54,7 +56,8 @@ type Application =
  };
 service : {
   createApplication: (text, text) -> (Result);
-  createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
+  createConfiguration: (text, text, ConfigurationTypes, text, bool) ->
+   (Result);
   createEnvironment: (text, text, text) -> (Result);
   getAllConfigValues: (text, text) -> (Result_3);
   getApplication: (text) -> (Result_2);

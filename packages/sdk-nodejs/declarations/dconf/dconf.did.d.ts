@@ -10,6 +10,7 @@ export interface Application {
 }
 export interface Configuration {
   'key' : string,
+  'isPrivate' : boolean,
   'valueType' : ConfigurationTypes,
   'defaultValue' : string,
 }
@@ -20,6 +21,7 @@ export type ConfigurationTypes = { 'string' : null } |
 export interface ConfigurationValueForEnv {
   'key' : string,
   'value' : string,
+  'isPrivate' : boolean,
   'valueType' : ConfigurationTypes,
   'environmentId' : string,
 }
@@ -36,7 +38,7 @@ export type Result_3 = { 'ok' : Array<ConfigurationValueForEnv> } |
 export interface _SERVICE {
   'createApplication' : ActorMethod<[string, string], Result>,
   'createConfiguration' : ActorMethod<
-    [string, string, ConfigurationTypes, string],
+    [string, string, ConfigurationTypes, string, boolean],
     Result,
   >,
   'createEnvironment' : ActorMethod<[string, string, string], Result>,

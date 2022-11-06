@@ -21,6 +21,7 @@ module {
     key: Text;
     defaultValue: Text;
     valueType: ConfigurationTypes;
+    isPrivate: Bool;
   };
 
   public type ConfigurationTypes = {
@@ -35,5 +36,6 @@ module {
     environmentId: Text;
     valueType: ConfigurationTypes;
     value: Text;
+    isPrivate: Bool;
   };
 };

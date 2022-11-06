@@ -8,6 +8,7 @@ export const idlFactory = ({ IDL }) => {
   const ConfigurationValueForEnv = IDL.Record({
     'key' : IDL.Text,
     'value' : IDL.Text,
+    'isPrivate' : IDL.Bool,
     'valueType' : ConfigurationTypes,
     'environmentId' : IDL.Text,
   });
@@ -17,6 +18,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Configuration = IDL.Record({
     'key' : IDL.Text,
+    'isPrivate' : IDL.Bool,
     'valueType' : ConfigurationTypes,
     'defaultValue' : IDL.Text,
   });
@@ -38,7 +40,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'createApplication' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'createConfiguration' : IDL.Func(
-        [IDL.Text, IDL.Text, ConfigurationTypes, IDL.Text],
+        [IDL.Text, IDL.Text, ConfigurationTypes, IDL.Text, IDL.Bool],
         [Result],
         [],
       ),

@@ -1,13 +1,50 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
+import Utf8 from 'crypto-js/enc-utf8';
+import AES from 'crypto-js/aes';
 import { useContext } from 'react';
 // eslint-disable-next-line import/no-relative-packages
 import { idlFactory } from '../declarations/dconf/dconf.did.js';
 import { IdentityContext } from '../contexts/identity-context';
 
+let encryptionKey;
+
+function getEncryptionKey() {
+  if (!encryptionKey) {
+    // eslint-disable-next-line no-alert
+    encryptionKey = window.prompt('Please enter the encryption key for Private configurations', '');
+  }
+
+  return encryptionKey;
+}
+
+function encrypt(plaintext) {
+  if (!plaintext) return null;
+  const encrypted = AES.encrypt(plaintext, getEncryptionKey()).toString();
+  return encrypted;
+}
+
+function decrypt(encryptedValue) {
+  if (!encryptedValue) return null;
+  const decrypted = AES.decrypt(encryptedValue, getEncryptionKey()).toString(Utf8);
+  if (!decrypted) {
+    throw new Error('dconf: invalid encryption key');
+  }
+  return decrypted;
+}
+
 function sanitizeConfigurations(config) {
   return ({
     ...config,
     valueType: Object.keys(config.valueType)[0],
+  });
+}
+
+function decryptPrivateConfigurations(config) {
+  if (!config.isPrivate) return config;
+
+  return ({
+    ...config,
+    value: decrypt(config.value),
   });
 }
 
@@ -53,7 +90,9 @@ export default function useCanister() {
 
     if (!application) { return null; }
 
-    application.configurations = application.configurations.map(sanitizeConfigurations);
+    application.configurations = application.configurations
+      .map(decryptPrivateConfigurations)
+      .map(sanitizeConfigurations);
 
     return application;
   }
@@ -68,20 +107,26 @@ export default function useCanister() {
 
     // Group by env key = { env: [ConfigValue] }
     return allEnvs.reduce((acc, res, index) => {
-      acc[application.environments[index].id] = res;
+      acc[application.environments[index].id] = res
+        .map(decryptPrivateConfigurations)
+        .map(sanitizeConfigurations);
+
       return acc;
     }, {});
   }
 
-  async function setConfigurationValue(appId, envId, configKey, value) {
+  async function setConfigurationValue(appId, envId, config, value) {
     const actor = await getActor();
-    const response = await actor.setConfigValue(appId, envId, configKey, value);
+    const response = await actor.setConfigValue(appId, envId, config.key, config.isPrivate ? encrypt(value) : value);
     return response.ok;
   }
 
-  async function createConfiguration(appId, { key, valueType, defaultValue }) {
+  async function createConfiguration(appId, {
+    key, valueType, defaultValue, isPrivate,
+  }) {
     const actor = await getActor();
-    const response = await actor.createConfiguration(appId, key, { [valueType]: null }, defaultValue);
+    const defaultVal = isPrivate ? encrypt(defaultValue) : defaultValue;
+    const response = await actor.createConfiguration(appId, key, { [valueType]: null }, defaultVal, isPrivate);
     return response.ok;
   }
 

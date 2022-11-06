@@ -9,7 +9,9 @@ function CreateConfigModal(props) {
     application, isOpen, onRequestClose,
   } = props;
 
-  const [configuration, setConfiguration] = React.useState({ key: '', valueType: 'string', defaultValue: '' });
+  const [configuration, setConfiguration] = React.useState({
+    key: '', valueType: 'string', defaultValue: '', isPrivate: false,
+  });
   const { createConfiguration } = useCanister();
 
   const title = 'Add new configuration';
@@ -69,6 +71,22 @@ function CreateConfigModal(props) {
               value={configuration.defaultValue}
               onChange={(val) => { setConfiguration((ex) => ({ ...ex, defaultValue: val })); }}
             />
+          </div>
+        </div>
+
+        <div className="field">
+          <label htmlFor="private" className="label">Private</label>
+          <div className="control">
+            <select
+              id="private"
+              className="input form-input"
+              type="text"
+              value={configuration.isPrivate}
+              onChange={(e) => { setConfiguration((ex) => ({ ...ex, isPrivate: e.target.value === 'true' })); }}
+            >
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
           </div>
         </div>
 

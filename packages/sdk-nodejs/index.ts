@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import Utf8 from 'crypto-js/enc-utf8';
+import AES from 'crypto-js/aes';
 import { Actor, HttpAgent } from '@dfinity/agent';
 // @ts-ignore
 import { idlFactory } from './declarations/dconf/dconf.did.js';
@@ -13,12 +15,14 @@ type ConfigurationResponse = {
   key: string;
   value: string;
   valueType: { string?: null, boolean?: null, number?: null }
+  isPrivate: boolean;
 }
 
 type SDKParams = {
   dconfCanisterId?: string,
   host?: string,
   setProcessEnv?: boolean,
+  encryptionKey?: string,
 }
 
 // Defaults
@@ -58,6 +62,18 @@ function dconf(applicationId: string, environmentId: string, params: SDKParams =
 
     for (const entry of response) {
       let formattedValue : string | boolean | number = entry.value;
+
+      if (entry.isPrivate) {
+        if (!params.encryptionKey) {
+          console.error(`dconf: ${entry.key} is a private config, but the encryptionKey is not set.`);
+          continue;
+        }
+        formattedValue = AES.decrypt(formattedValue, params.encryptionKey as string).toString(Utf8);
+
+        if (!formattedValue) {
+          throw new Error("dconf: invalid encryption key");
+        }
+      }
 
       if (entry.valueType.boolean !== undefined) {
         formattedValue = formattedValue === 'true' ? true : formattedValue;
