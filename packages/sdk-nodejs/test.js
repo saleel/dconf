@@ -1,9 +1,7 @@
 const dconf = require('./dist/index');
 
-console.log(dconf)
-
-dconf('facebook', 'production', { setProcessEnv: true }).getConfigValues();
+dconf('example', 'production', { setProcessEnv: true, host: 'http://127.0.0.1:8000' }).getConfigValues();
 
 setTimeout(() => {
-  console.log(process.env.MAX_TOP_ITEMS);
+  console.log(process.env.ANALYTICS_ID);
 }, 3000);

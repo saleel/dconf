@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Decentralized configuration management",
   "private": "true",
+  "license": "MIT",
   "scripts": {
     "build": "(cd packages/app && yarn build)",
     "deploy": "dfx deploy"

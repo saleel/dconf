@@ -97,7 +97,7 @@ function ApplicationPage() {
       </div>
 
       {environments.length === 0 && renderNoEnvironmentView()}
-      {configurations.length === 0 && renderNoConfigurationView()}
+      {environments.length > 0 && configurations.length === 0 && renderNoConfigurationView()}
 
       {environments.length > 0 && configurations.length > 0 && (
         <div className="table-container">

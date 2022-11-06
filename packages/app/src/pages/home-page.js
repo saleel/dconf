@@ -80,6 +80,8 @@ function HomePage() {
             </div>
           </Link>
         ))}
+
+        <button type="button" className="button mt-2" onClick={() => { setShowCreateApplicationModal(true); }}>Create Application</button>
       </div>
     );
   }

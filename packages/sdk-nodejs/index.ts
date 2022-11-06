@@ -15,14 +15,24 @@ type ConfigurationResponse = {
   valueType: { string?: null, boolean?: null, number?: null }
 }
 
-function dconf(applicationId: string, environmentId: string, params: { canisterId: string, setProcessEnv: string }) {
-  const canisterId = params.canisterId || 'rrkah-fqaaa-aaaaa-aaaaq-cai';
+type SDKParams = {
+  dconfCanisterId?: string,
+  host?: string,
+  setProcessEnv?: boolean,
+}
+
+// Defaults
+const DCONF_HOST = 'http://127.0.0.1:8000';
+const DCONF_CANISTER_ID = 'rrkah-fqaaa-aaaaa-aaaaq-cai';
+
+function dconf(applicationId: string, environmentId: string, params: SDKParams = {}) {
+  const canisterId = params.dconfCanisterId || DCONF_CANISTER_ID;
 
   const agent = new HttpAgent({
-    host: 'http://127.0.0.1:8000',
+    host: params.host || DCONF_HOST,
   });
 
-  agent.fetchRootKey();
+  const isDevMode = params.host;
 
   const actor = Actor.createActor(idlFactory, {
     agent,
@@ -34,6 +44,10 @@ function dconf(applicationId: string, environmentId: string, params: { canisterI
   async function getConfigValues() {
     if (configValuesCache) {
       return configValuesCache;
+    }
+
+    if (isDevMode) {
+      await agent.fetchRootKey();
     }
 
     const response = await actor.getAllConfigValues(applicationId, environmentId)

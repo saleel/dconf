@@ -2,6 +2,8 @@
   "name": "@dconf/app",
   "version": "0.1.0",
   "description": "Decentralized configuration management",
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "build": "parcel build ./index.html",
     "prebuild": "npm run copy:types && npm run inject-env",

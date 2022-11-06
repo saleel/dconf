@@ -1,8 +1,9 @@
 {
   "name": "@dconf/sdk",
   "version": "0.1.0",
-  "description": "Decentralized configuration management",
+  "description": "NodeJS SDK for dconf",
   "main": "dist",
+  "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prebuild": "yarn copy:types",
