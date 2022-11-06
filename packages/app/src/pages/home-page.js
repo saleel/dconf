@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useCanister from '../hooks/use-canister';
-import { IdentityContext } from '../context';
+import { IdentityContext } from '../contexts/identity-context';
 import usePromise from '../hooks/use-promise';
 import CreateApplicationModal from '../components/create-application-modal';
 
@@ -70,7 +70,7 @@ function HomePage() {
         <div className="section-title">Your Applications</div>
 
         {applications.map((application) => (
-          <Link to={`/application/${application.id}`}>
+          <Link key={application.id} to={`/application/${application.id}`}>
             <div key={application.id} className="application-box">
               <div className="application-name">{application.name}</div>
               <div>

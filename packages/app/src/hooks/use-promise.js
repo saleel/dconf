@@ -49,6 +49,7 @@ const cache = {
  * @property [cacheKey] {string}
  * @property [updateWithRevalidated = false] {boolean}
  * @property [cachePeriodInSecs = 10] {number}
+ * @property [refreshInterval] {number}
  */
 
 /**
@@ -60,7 +61,7 @@ const cache = {
 function usePromise(promise, options = {}) {
   const {
     defaultValue, dependencies = [], cacheKey, updateWithRevalidated = true, cachePeriodInSecs = 10,
-    conditions = [],
+    conditions = [], refreshInterval,
   } = options;
 
   let cachedData;
@@ -79,8 +80,9 @@ function usePromise(promise, options = {}) {
   const [error, setError] = React.useState();
 
   let didCancel = false;
+  let timer;
 
-  async function fetch() {
+  async function fetch(existingData) {
     didCancel = false;
     if (error) {
       setError(undefined);
@@ -93,13 +95,18 @@ function usePromise(promise, options = {}) {
       }
     }
 
-    setIsFetching(true);
+    if (!existingData) {
+      setIsFetching(true);
+    }
 
+    let data;
     try {
-      const data = await promise();
+      data = await promise();
       if (!didCancel) {
+        const isDataChanged = JSON.stringify(existingData) !== JSON.stringify(data);
+
         // In some cases newly fetched data don't have to be updated (updateWithRevalidated = false)
-        if (updateWithRevalidated || cachedData === undefined) {
+        if (isDataChanged && (updateWithRevalidated || cachedData === undefined)) {
           setResult(data);
           setFetchedAt(new Date());
         }
@@ -118,8 +125,13 @@ function usePromise(promise, options = {}) {
         // }
       }
     }
-
     setIsFetching(false);
+
+    if (refreshInterval) {
+      timer = setTimeout(() => {
+        fetch(data);
+      }, refreshInterval);
+    }
   }
 
   React.useEffect(() => {
@@ -130,6 +142,7 @@ function usePromise(promise, options = {}) {
     // eslint-disable-next-line consistent-return
     return () => {
       didCancel = true;
+      clearTimeout(timer);
     };
   }, [...dependencies, ...conditions]);
 

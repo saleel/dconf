@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import usePromise from '../hooks/use-promise';
@@ -5,7 +6,7 @@ import EditConfigValueModal from '../components/edit-config-value-modal';
 import CreateConfigModal from '../components/create-config-modal';
 import CreateEnvironmentModal from '../components/create-env-modal';
 import useCanister from '../hooks/use-canister';
-import { IdentityContext } from '../context';
+import { IdentityContext } from '../contexts/identity-context';
 
 function ApplicationPage() {
   const { applicationId } = useParams();
@@ -22,6 +23,7 @@ function ApplicationPage() {
   const [application, { isFetching, error }] = usePromise(() => getApplication(applicationId), {
     conditions: [applicationId],
     dependencies: [applicationId],
+    refreshInterval: 3000,
   });
 
   const [allConfigValues, { isFetching: isFetchingValues, error: errorValues, reFetch }] = usePromise(() => getAllConfigValues(application), {
@@ -161,7 +163,7 @@ function ApplicationPage() {
             setIsEditModalOpen(false);
             setSelectedConfig({});
             if (isUpdated) {
-              reFetch();
+              window.alert('Success. Changes will be reflected in the UI shortly');
             }
           }}
         />
@@ -173,7 +175,7 @@ function ApplicationPage() {
         onRequestClose={(isUpdated) => {
           setIsCreateConfigModalOpen(false);
           if (isUpdated) {
-            reFetch();
+            window.alert('Success. Changes will be reflected in the UI shortly');
           }
         }}
       />
@@ -184,7 +186,7 @@ function ApplicationPage() {
         onRequestClose={(isUpdated) => {
           setIsCreateEnvironmentModalOpen(false);
           if (isUpdated) {
-            reFetch();
+            window.alert('Success. Changes will be reflected in the UI shortly');
           }
         }}
       />

@@ -2,7 +2,7 @@ import { Actor, HttpAgent } from '@dfinity/agent';
 import { useContext } from 'react';
 // eslint-disable-next-line import/no-relative-packages
 import { idlFactory } from '../declarations/dconf/dconf.did.js';
-import { IdentityContext } from '../context';
+import { IdentityContext } from '../contexts/identity-context';
 
 function sanitizeConfigurations(config) {
   return ({
@@ -14,6 +14,8 @@ function sanitizeConfigurations(config) {
 export default function useCanister() {
   /** @type {{ identity: import("@dfinity/agent").Identity }} * */
   const { identity } = useContext(IdentityContext);
+
+  const isDevMode = window.location.href.includes('localhost') || window.location.href.includes('127.0.0.1');
 
   async function getActor() {
     if (!identity) {
@@ -28,7 +30,7 @@ export default function useCanister() {
     });
 
     // eslint-disable-next-line no-underscore-dangle
-    if (window.location.href.includes('localhost') && !agent._rootKeyFetched) {
+    if (isDevMode && !agent._rootKeyFetched) {
       await agent.fetchRootKey();
     }
 

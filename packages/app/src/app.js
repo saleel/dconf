@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/home-page';
 import ApplicationPage from './pages/application-page';
 import Layout from './components/layout';
-import { IdentityContextProvider } from './context';
+import { IdentityContextProvider } from './contexts/identity-context';
 
 function App() {
   return (

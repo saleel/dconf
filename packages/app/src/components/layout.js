@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { IdentityContext } from '../context';
+import { IdentityContext } from '../contexts/identity-context';
 
 export default function Layout() {
   const { identity, login, logout } = React.useContext(IdentityContext);
