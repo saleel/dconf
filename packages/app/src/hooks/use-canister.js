@@ -28,7 +28,7 @@ export default function useCanister() {
     });
 
     // eslint-disable-next-line no-underscore-dangle
-    if (!agent._rootKeyFetched) {
+    if (window.location.href.includes('localhost') && !agent._rootKeyFetched) {
       await agent.fetchRootKey();
     }
 

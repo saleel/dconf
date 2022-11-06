@@ -1,0 +1,59 @@
+type Result_2 = 
+ variant {
+   err: text;
+   ok: vec ConfigurationValueForEnv;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: Application;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type EnvironmentList = vec Environment;
+type Environment = 
+ record {
+   id: text;
+   name: text;
+ };
+type ConfigurationValueForEnv = 
+ record {
+   environmentId: text;
+   key: text;
+   value: text;
+   valueType: ConfigurationTypes;
+ };
+type ConfigurationTypes = 
+ variant {
+   boolean;
+   number;
+   string;
+ };
+type ConfigurationList = vec Configuration;
+type Configuration = 
+ record {
+   defaultValue: text;
+   key: text;
+   valueType: ConfigurationTypes;
+ };
+type Application = 
+ record {
+   configurations: ConfigurationList;
+   environments: EnvironmentList;
+   id: text;
+   name: text;
+   owner: principal;
+ };
+service : {
+  createApplication: (text, text) -> (Result);
+  createConfiguration: (text, text, ConfigurationTypes, text) -> (Result);
+  createEnvironment: (text, text, text) -> (Result);
+  getAllConfigValues: (text, text) -> (Result_2);
+  getApplication: (text) -> (Result_1);
+  getConfigValue: (text, text, text) -> (Result);
+  getOwnedApplications: () -> (vec Application);
+  setConfigValue: (text, text, text, text) -> (Result);
+}

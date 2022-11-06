@@ -1,0 +1,23 @@
+{
+  "name": "@dconf/sdk",
+  "version": "0.1.0",
+  "description": "Decentralized configuration management",
+  "main": "dist",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "prebuild": "yarn copy:types",
+    "copy:types": "rsync -avr ../../.dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --exclude='*.most' --delete declarations",
+    "prepublish": "yarn build",
+    "test": "node test"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "engines": {
+    "node": "^12 || ^14 || ^16 || ^18"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^0.12.0",
+    "node-fetch": "^2.6.7"
+  }
+}
