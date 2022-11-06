@@ -15,7 +15,7 @@ type ProviderParams = {
   children: any,
   applicationId: string,
   environmentId: string,
-  canisterId?: string,
+  dconfCanisterId?: string,
   host?: string,
 }
 
@@ -31,7 +31,7 @@ const DCONF_HOST = 'http://127.0.0.1:8000';
 const DCONF_CANISTER_ID = 'rrkah-fqaaa-aaaaa-aaaaq-cai';
 
 export function DconfContextProvider({
-  children, canisterId, applicationId, environmentId, host,
+  children, dconfCanisterId, applicationId, environmentId, host,
 }: ProviderParams) {
   const [isFetching, setIsFetching] = React.useState(true);
   const [configValues, setConfigValues] = React.useState({});
@@ -44,7 +44,7 @@ export function DconfContextProvider({
 
   const actor = Actor.createActor(idlFactory, {
     agent,
-    canisterId: canisterId || DCONF_CANISTER_ID,
+    canisterId: dconfCanisterId || DCONF_CANISTER_ID,
   });
 
   async function getConfigValues() {
@@ -94,7 +94,7 @@ export function DconfContextProvider({
     return () => {
       didCancel = true;
     };
-  }, [canisterId, applicationId, environmentId, host,]);
+  }, [dconfCanisterId, applicationId, environmentId, host,]);
 
 
   return (
