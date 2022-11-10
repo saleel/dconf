@@ -27,11 +27,11 @@ actor {
           configurations = [];
         };
 
-        applications := Trie.replace(
+        applications := Trie.put(
           applications,
           appKey,
           Text.equal,
-          ?application,
+          application,
         ).0;
 
         return #ok(id);

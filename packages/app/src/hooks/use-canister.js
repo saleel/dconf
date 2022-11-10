@@ -99,6 +99,10 @@ export default function useCanister() {
 
   async function getAllConfigValues(application) {
     const actor = await getActor();
+    if (application.environments.length) {
+      return {};
+    }
+
     const allEnvs = await Promise.all(
       application.environments.map(
         (env) => actor.getAllConfigValues(application.id, env.id).then((r) => r.ok),

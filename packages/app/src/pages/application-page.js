@@ -27,7 +27,7 @@ function ApplicationPage() {
     refreshInterval: 3000,
   });
 
-  const [allConfigValues, { isFetching: isFetchingValues, error: errorValues, reFetch }] = usePromise(() => getAllConfigValues(application), {
+  const [allConfigValues, { isFetching: isFetchingValues, error: errorValues }] = usePromise(() => getAllConfigValues(application), {
     conditions: [application],
   });
 
