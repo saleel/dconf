@@ -84,3 +84,33 @@ root.render(
 
 
 ```
+
+## Browser SDK
+
+
+Install using
+```sh
+npm install @dconf/browser
+```
+
+Usage
+
+```js
+import { getConfigValues } from '@dconf/browser';
+
+getConfigValues({ applicationId: 'example', environmentId: 'staging' })
+  .then(console.log)
+  .catch(console.error);
+
+```
+
+Or you can directly call `window.getConfigValues` if you are not using any bundlers
+
+```js
+<script src="~/dconf.js"></script>
+<script>
+  window.getConfigValues({ applicationId: 'example', environmentId: 'staging' })
+    .then(console.log)
+    .catch(console.error);
+</script>
+```

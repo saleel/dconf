@@ -1,0 +1,4 @@
+<script type="module">
+  import dconf from "./dist/index.js";
+  dconf('example', 'production', { host: 'http://127.0.0.1:8000' }).getConfigValues().then(console.log);
+</script>

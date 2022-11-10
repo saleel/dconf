@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>dconf JS example</title>
+    <base href="/" />
+  </head>
+  <body>
+    <main id="root" />
+    <script src="./dist/dconf.js"></script>
+    <script>
+      window.getConfigValues({ applicationId: 'example', environmentId: 'staging', host: 'http://127.0.0.1:8000' })
+        .then(console.log)
+        .catch(console.error);
+    </script>
+  </body>
+</html>

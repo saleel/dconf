@@ -109,3 +109,4 @@ function dconf(applicationId: string, environmentId: string, params: SDKParams =
 
 // @ts-ignore
 export = dconf;
+export default dconf;

@@ -1,0 +1,51 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/saleel/.cargo/bin:/usr/local/Cellar/node/12.10.0/bin:/usr/local/Cellar/node/12.10.0/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.17.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/saleel/Projects/dconf/packages/sdk-browser/package.json: Unexpected token } in JSON at position 471
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "@dconf/browser",
+    "version": "0.1.0",
+    "description": "Browser/Javascript SDK for dconf",
+    "license": "MIT",
+    "private": false,
+    "main": "dist/index.js",
+    "scripts": {
+      "build": "webpack",
+      "prebuild": "yarn copy:types",
+      "prepublish": "yarn copy:types",
+      "copy:types": "rsync -avr ../../.dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --exclude='*.most' --delete src/declarations",
+    },
+    "devDependencies": {
+      "typescript": "^4.8.4"
+    },
+    "dependencies": {
+      "@dfinity/agent": "^0.12.0",
+      "crypto-js": "^4.1.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
