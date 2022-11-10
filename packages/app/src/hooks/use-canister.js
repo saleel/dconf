@@ -142,6 +142,24 @@ export default function useCanister() {
     return response.ok;
   }
 
+  async function removeApplication(id) {
+    const actor = await getActor();
+    const response = await actor.removeApplication(id);
+    return response.ok;
+  }
+
+  async function removeEnvironment(appId, envId) {
+    const actor = await getActor();
+    const response = await actor.removeEnvironment(appId, envId);
+    return response.ok;
+  }
+
+  async function removeConfiguration(appId, configKey) {
+    const actor = await getActor();
+    const response = await actor.removeConfiguration(appId, configKey);
+    return response.ok;
+  }
+
   return {
     getOwnedApplications,
     createApplication,
@@ -150,5 +168,8 @@ export default function useCanister() {
     setConfigurationValue,
     createConfiguration,
     createEnvironment,
+    removeApplication,
+    removeConfiguration,
+    removeEnvironment,
   };
 }

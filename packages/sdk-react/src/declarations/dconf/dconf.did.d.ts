@@ -46,5 +46,8 @@ export interface _SERVICE {
   'getApplication' : ActorMethod<[string], Result_2>,
   'getConfigValue' : ActorMethod<[string, string, string], Result>,
   'getOwnedApplications' : ActorMethod<[], Result_1>,
+  'removeApplication' : ActorMethod<[string], Result>,
+  'removeConfiguration' : ActorMethod<[string, string], Result>,
+  'removeEnvironment' : ActorMethod<[string, string], Result>,
   'setConfigValue' : ActorMethod<[string, string, string, string], Result>,
 }

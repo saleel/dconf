@@ -40,6 +40,20 @@ actor {
     };
   };
 
+  public shared (msg) func removeApplication(id : Text) : async Result.Result<Text, Text> {
+    // Check for existing app with same id
+    switch (_getApplication(id)) {
+      case null #err("No application exist with given id");
+      case (?existingApp) {
+        let appKey = _getApplicationTrieKey(id);
+
+        applications := Trie.remove(applications, appKey, Text.equal).0;
+
+        return #ok(id);
+      };
+    };
+  };
+
   public shared (msg) func createEnvironment(appId : Text, envId : Text, name : Text) : async Result.Result<Text, Text> {
     switch (_getApplication(appId)) {
       case null { return #err("Application not found") };
@@ -65,6 +79,41 @@ actor {
           name = existingApp.name;
           owner = existingApp.owner;
           environments = Array.append(existingApp.environments, [environment]);
+          configurations = existingApp.configurations;
+        };
+
+        applications := Trie.replace(
+          applications,
+          _getApplicationTrieKey(appId),
+          Text.equal,
+          ?newApplication,
+        ).0;
+
+        return #ok(envId);
+      };
+    };
+  };
+
+  public shared (msg) func removeEnvironment(appId : Text, envId : Text) : async Result.Result<Text, Text> {
+    switch (_getApplication(appId)) {
+      case null { return #err("Application not found") };
+      case (?existingApp) {
+
+        // Ensure caller is app owner
+        if (msg.caller != existingApp.owner) {
+          return #err("Not the owner of the application");
+        };
+
+        // Check for existing env with same name
+        if (_getEnvironment(existingApp, envId) == null) {
+          return #err("No environment found with given ID");
+        };
+
+        let newApplication : Types.Application = {
+          id = existingApp.id;
+          name = existingApp.name;
+          owner = existingApp.owner;
+          environments = Array.filter(existingApp.environments, func(e : Types.Environment) : Bool = e.id == envId);
           configurations = existingApp.configurations;
         };
 
@@ -109,6 +158,41 @@ actor {
           owner = existingApp.owner;
           environments = existingApp.environments;
           configurations = Array.append(existingApp.configurations, [configuration]);
+        };
+
+        applications := Trie.replace(
+          applications,
+          _getApplicationTrieKey(appId),
+          Text.equal,
+          ?newApplication,
+        ).0;
+
+        return #ok(configKey);
+      };
+    };
+  };
+
+  public shared (msg) func removeConfiguration(appId : Text, configKey: Text) : async Result.Result<Text, Text> {
+    switch (_getApplication(appId)) {
+      case null { return #err("Application not found") };
+      case (?existingApp) {
+
+        // Ensure caller is app owner
+        if (msg.caller != existingApp.owner) {
+          return #err("Not the owner of the application");
+        };
+
+        // Check for existing env with same name
+        if (_getConfiguration(existingApp, configKey) == null) {
+          return #err("No configuration found with given key");
+        };
+
+        let newApplication : Types.Application = {
+          id = existingApp.id;
+          name = existingApp.name;
+          owner = existingApp.owner;
+          configurations = Array.filter(existingApp.configurations, func(e : Types.Configuration) : Bool = e.key == configKey);
+          environments = existingApp.environments;
         };
 
         applications := Trie.replace(

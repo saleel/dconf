@@ -54,7 +54,8 @@ p {
   height: 100%;
   flex-direction: column;
   max-width: 1000px;
-  margin: 0 auto;;
+  margin: 0 auto;
+  ;
 }
 
 .wrapper {
@@ -156,14 +157,12 @@ p {
       bottom: 0;
       left: 0;
       transform: translateX(-100%);
-      background-image: linear-gradient(
-        90deg,
-        rgba(#fff, 0) 0,
-        rgba(#fff, 0.25) 25%,
-        rgba(#fff, 0.5) 50%,
-        rgba(#fff, 0.75) 75%,
-        rgba(#fff, 0)
-      );
+      background-image: linear-gradient(90deg,
+          rgba(#fff, 0) 0,
+          rgba(#fff, 0.25) 25%,
+          rgba(#fff, 0.5) 50%,
+          rgba(#fff, 0.75) 75%,
+          rgba(#fff, 0));
       animation: shimmer 1s infinite;
       content: "";
     }
@@ -196,8 +195,21 @@ p {
   align-items: center;
   font-size: 0.9rem;
 
+  .btn-delete-app {
+    display: block;
+    visibility: hidden;
+    margin-left: 1rem;
+    transform: rotateZ(45deg);
+    text-align: right;
+    font-size: 1.5rem;
+  }
+
   &:hover {
     background-color: var(--gray-200);
+
+    .btn-delete-app {
+      visibility: visible;
+    }
   }
 
   div {
@@ -207,6 +219,7 @@ p {
   .application-name {
     font-size: 1.1rem;
     font-weight: 500;
+    flex-grow: 1;
   }
 }
 
@@ -226,7 +239,7 @@ p {
 .table {
   width: 100%;
   border: 1px solid var(--text-color);
-  
+
   thead {
     width: 100%;
 
@@ -307,7 +320,8 @@ p {
     color: #fff;
   }
 
-  &[disabled="disabled"], &[disabled="disabled"]:hover {
+  &[disabled="disabled"],
+  &[disabled="disabled"]:hover {
     cursor: not-allowed;
     background-color: #fff;
     color: var(--text-color);
@@ -374,6 +388,37 @@ p {
 .flex-row {
   display: flex;
   flex-direction: row;
+}
+
+.btn-delete-config,
+.btn-delete-env {
+  font-size: 1.25rem;
+  transform: rotateZ(45deg);
+}
+
+.env-header {
+  .btn-delete-env {
+    margin-left: 10px;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .btn-delete-env {
+      visibility: visible;
+    }
+  }
+}
+
+.config-row {
+  .btn-delete-config {
+    visibility: hidden;
+  }
+
+  &:hover {
+    .btn-delete-config {
+      visibility: visible;
+    }
+  }
 }
 
 @keyframes appear {

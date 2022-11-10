@@ -13,6 +13,7 @@ function ApplicationPage() {
 
   const { identity } = useContext(IdentityContext);
   const navigate = useNavigate();
+  const { removeEnvironment, removeConfiguration } = useCanister();
 
   const [selectedConfig, setSelectedConfig] = React.useState({});
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -35,6 +36,18 @@ function ApplicationPage() {
       document.title = `${application.name} Configuration Management - dconf`;
     }
   }, [application]);
+
+  function onDeleteEnvironmentClick(envId) {
+    if (window.confirm('Are you sure you want to remove this environment?')) {
+      removeEnvironment(applicationId, envId);
+    }
+  }
+
+  function onDeleteConfigurationClick(configKey) {
+    if (window.confirm('Are you sure you want to remove this configuration?')) {
+      removeConfiguration(applicationId, configKey);
+    }
+  }
 
   // No logged in
   if (!identity) {
@@ -109,17 +122,25 @@ function ApplicationPage() {
               <tr>
                 <th>Config Key</th>
                 {(environments).map((environment) => (
-                  <th key={environment.id}>
+                  <th key={environment.id} className="env-header">
                     {environment.name || environment.id}
+                    <button
+                      type="button"
+                      className="icon-button btn-delete-env"
+                      onClick={() => onDeleteEnvironmentClick(environment.id)}
+                    >
+                      +
+                    </button>
                   </th>
                 ))}
+                <th style={{ width: '15px', minWidth: '15px' }}> </th>
               </tr>
             </thead>
 
             <tbody>
               {configurations.map((conf, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <tr key={i}>
+                <tr key={i} className="config-row">
                   <td>{conf.key}</td>
                   {environments.map((env) => {
                     const value = allConfigValues[env.id]?.find((c) => c.key === conf.key)?.value;
@@ -141,6 +162,15 @@ function ApplicationPage() {
                       </td>
                     );
                   })}
+                  <td>
+                    <button
+                      type="button"
+                      className="icon-button btn-delete-config"
+                      onClick={() => onDeleteConfigurationClick(conf.key)}
+                    >
+                      +
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

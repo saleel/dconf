@@ -63,5 +63,8 @@ service : {
   getApplication: (text) -> (Result_2);
   getConfigValue: (text, text, text) -> (Result);
   getOwnedApplications: () -> (Result_1);
+  removeApplication: (text) -> (Result);
+  removeConfiguration: (text, text) -> (Result);
+  removeEnvironment: (text, text) -> (Result);
   setConfigValue: (text, text, text, text) -> (Result);
 }

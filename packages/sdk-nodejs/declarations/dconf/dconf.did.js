@@ -53,6 +53,9 @@ export const idlFactory = ({ IDL }) => {
     'getApplication' : IDL.Func([IDL.Text], [Result_2], []),
     'getConfigValue' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [Result], []),
     'getOwnedApplications' : IDL.Func([], [Result_1], []),
+    'removeApplication' : IDL.Func([IDL.Text], [Result], []),
+    'removeConfiguration' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
+    'removeEnvironment' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'setConfigValue' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [Result],

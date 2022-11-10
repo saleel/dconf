@@ -10,13 +10,20 @@ function HomePage() {
 
   const { identity, login } = useContext(IdentityContext);
 
-  const { getOwnedApplications } = useCanister();
+  const { getOwnedApplications, removeApplication } = useCanister();
 
   const [applications, { isFetching, error, reFetch }] = usePromise(() => getOwnedApplications(), {
     conditions: [identity],
     dependencies: [identity],
     defaultValue: [],
   });
+
+  function onDeleteApplicationClick(applicationId) {
+    // eslint-disable-next-line no-alert
+    if (window.confirm('Are you sure you want to remove this application?')) {
+      removeApplication(applicationId);
+    }
+  }
 
   // console.log(applications);
   function renderLoginView() {
@@ -76,6 +83,15 @@ function HomePage() {
               <div>
                 <div>{application.environments.length} environments</div>
                 <div>{application.configurations.length} configurations</div>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  className="icon-button btn-delete-app"
+                  onClick={() => onDeleteApplicationClick(application.id)}
+                >
+                  +
+                </button>
               </div>
             </div>
           </Link>
