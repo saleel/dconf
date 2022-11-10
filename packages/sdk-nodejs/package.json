@@ -1,5 +1,5 @@
 {
-  "name": "@dconf/sdk",
+  "name": "dconf-node",
   "version": "0.1.0",
   "description": "NodeJS SDK for dconf",
   "main": "dist",

@@ -1,5 +1,5 @@
 {
-  "name": "@dconf/react",
+  "name": "dconf-react",
   "version": "0.1.0",
   "description": "React SDK for dconf",
   "license": "MIT",
@@ -18,8 +18,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@dfinity/agent": "^0.12.0",
-    "crypto-js": "^4.1.1"
+    "@dfinity/agent": "^0.12.0"
   },
   "peerDependencies": {
     "react": "^16.0.0",

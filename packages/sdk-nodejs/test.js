@@ -1,7 +1,7 @@
 const dconf = require('.');
 
-dconf('chainlook', 'production', { setProcessEnv: true, encryptionKey: '!QAZ2wsx' }).getConfigValues()
+dconf('example', 'production', { setProcessEnv: true }).getConfigValues()
   .then(console.log)
   .then(() => {
-    console.log(process.env.MAX_TOP_ITEMS);
+    console.log(process.env.ANALYTICS_ID);
   });

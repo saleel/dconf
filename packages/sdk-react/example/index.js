@@ -25,7 +25,7 @@ function App() {
 }
 
 root.render(
-  <DconfContextProvider applicationId="example" environmentId="production" host="http://127.0.0.1:8000">
+  <DconfContextProvider applicationId="example" environmentId="production">
     <App />
   </DconfContextProvider>,
 );

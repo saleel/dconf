@@ -1,7 +1,5 @@
 import React from 'react';
 import { Actor, HttpAgent } from '@dfinity/agent';
-import Utf8 from 'crypto-js/enc-utf8';
-import AES from 'crypto-js/aes';
 // @ts-ignore
 import { idlFactory } from './declarations/dconf/dconf.did.js';
 

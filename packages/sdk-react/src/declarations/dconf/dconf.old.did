@@ -18,21 +18,7 @@ type Result =
    err: text;
    ok: text;
  };
-type List_1 = 
- opt record {
-       Environment;
-       List_1;
-     };
-type List = 
- opt record {
-       Configuration;
-       List;
-     };
-type EnvironmentList = 
- opt record {
-       Environment;
-       List_1;
-     };
+type EnvironmentList = vec Environment;
 type Environment = 
  record {
    id: text;
@@ -52,11 +38,7 @@ type ConfigurationTypes =
    number;
    string;
  };
-type ConfigurationList = 
- opt record {
-       Configuration;
-       List;
-     };
+type ConfigurationList = vec Configuration;
 type Configuration = 
  record {
    defaultValue: text;

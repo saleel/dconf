@@ -22,7 +22,7 @@ npm install @dconf/sdk
 Usage
 
 ```js
-const dconfFactory = require('@dconf/sdk');
+const dconfFactory = require('dconf-node');
 
 const dconf = dconfFactory('example', 'production', { 
   setProcessEnv: true, // Set all config values to process.env
@@ -49,7 +49,7 @@ Usage
 ```js
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { useDconf, DconfContextProvider } from '..';
+import { useDconf, DconfContextProvider } from 'dconf-react';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -77,8 +77,8 @@ root.render(
   <DconfContextProvider 
     applicationId="example" 
     environmentId="production"
-    dconfCanisterId="..." // Override the canisterId of dconf deployed on IC network
-    host="http://127.0.0.1:8000" // Override the host address of the IC
+    {/* dconfCanisterId="..." // Override the canisterId of dconf deployed on IC network */}
+    {/* host="http://127.0.0.1:8000" // Override the host address of the IC */}
   >
     <App />
   </DconfContextProvider>,
@@ -98,7 +98,7 @@ npm install @dconf/browser
 Usage
 
 ```js
-import { getConfigValues } from '@dconf/browser';
+import { getConfigValues } from 'dconf-browser';
 
 getConfigValues({ applicationId: 'example', environmentId: 'staging' })
   .then(console.log)
