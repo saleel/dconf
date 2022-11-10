@@ -99,7 +99,7 @@ export default function useCanister() {
 
   async function getAllConfigValues(application) {
     const actor = await getActor();
-    if (application.environments.length) {
+    if (application.environments.length === 0) {
       return {};
     }
 
