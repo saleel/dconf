@@ -18,7 +18,21 @@ type Result =
    err: text;
    ok: text;
  };
-type EnvironmentList = vec Environment;
+type List_1 = 
+ opt record {
+       Environment;
+       List_1;
+     };
+type List = 
+ opt record {
+       Configuration;
+       List;
+     };
+type EnvironmentList = 
+ opt record {
+       Environment;
+       List_1;
+     };
 type Environment = 
  record {
    id: text;
@@ -38,7 +52,11 @@ type ConfigurationTypes =
    number;
    string;
  };
-type ConfigurationList = vec Configuration;
+type ConfigurationList = 
+ opt record {
+       Configuration;
+       List;
+     };
 type Configuration = 
  record {
    defaultValue: text;
@@ -59,11 +77,11 @@ service : {
   createConfiguration: (text, text, ConfigurationTypes, text, bool) ->
    (Result);
   createEnvironment: (text, text, text) -> (Result);
-  deleteApplication: (text) -> (Result);
   getAllConfigValues: (text, text) -> (Result_3);
   getApplication: (text) -> (Result_2);
   getConfigValue: (text, text, text) -> (Result);
   getOwnedApplications: () -> (Result_1);
+  removeApplication: (text) -> (Result);
   removeConfiguration: (text, text) -> (Result);
   removeEnvironment: (text, text) -> (Result);
   setConfigValue: (text, text, text, text) -> (Result);

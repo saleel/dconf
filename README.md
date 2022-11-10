@@ -8,6 +8,8 @@ You can define environments within your application (like staging, production) a
 
 You can used dconf SDKs in Javascript (NodeJS) and React to read configuration values in your application.
 
+[Try it out](https://3b2h6-lyaaa-aaaal-abjla-cai.ic0.app/)
+
 <br />
 
 ## NodeJS / Javascript SDK

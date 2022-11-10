@@ -1,7 +1,7 @@
-const dconf = require('./');
+const dconf = require('.');
 
-dconf('example', 'production', { setProcessEnv: true, host: 'http://127.0.0.1:8000', encryptionKey: '!QAZ2wsx' }).getConfigValues().then(console.log);
-
-setTimeout(() => {
-  console.log(process.env.ANALYTICS_ID);
-}, 3000);
+dconf('chainlook', 'production', { setProcessEnv: true, encryptionKey: '!QAZ2wsx' }).getConfigValues()
+  .then(console.log)
+  .then(() => {
+    console.log(process.env.MAX_TOP_ITEMS);
+  });

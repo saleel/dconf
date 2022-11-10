@@ -5,12 +5,6 @@ import { Actor, HttpAgent } from '@dfinity/agent';
 // @ts-ignore
 import { idlFactory } from './declarations/dconf/dconf.did.js';
 
-if (global && !global.fetch) {
-// @ts-ignore
-  global.fetch = fetch;
-}
-
-
 type ConfigurationResponse = {
   key: string;
   value: string;
@@ -26,14 +20,16 @@ type SDKParams = {
 }
 
 // Defaults
-const DCONF_HOST = 'http://127.0.0.1:8000';
-const DCONF_CANISTER_ID = 'rrkah-fqaaa-aaaaa-aaaaq-cai';
+const DCONF_HOST = 'https://ic0.app';
+const DCONF_CANISTER_ID = '3izmc-5qaaa-aaaal-abjkq-cai';
 
 function dconf(applicationId: string, environmentId: string, params: SDKParams = {}) {
   const canisterId = params.dconfCanisterId || DCONF_CANISTER_ID;
 
   const agent = new HttpAgent({
     host: params.host || DCONF_HOST,
+    // @ts-ignore
+    fetch: fetch
   });
 
   const isDevMode = params.host;
